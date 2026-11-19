@@ -17,12 +17,13 @@
 - Live synthetic accounts and their dictionary/history rows were removed through
   verified account IDs created only for the checks. Personal desktop data was
   never uploaded. No training or original protected CSV changes occurred.
-- Staged-content secret scans passed. Local env files contain required development
-  credentials, stay ignored, and are excluded from Vercel uploads. Full Git-history
-  scans and CI run again on the final pushed commit.
+- Staged-content and full Git-history secret scans passed. Local env files contain
+  required development credentials, stay ignored, and are excluded from Vercel
+  uploads. GitHub CI passed for the hosted implementation commit `ed7d8e3`.
 - Browser visual inspection was blocked because automatic approval review did
   not approve Computer Use for Google Chrome. The live HTTPS API was verified.
 
-Supabase Auth's production Site URL must point to the deployed site for email
-confirmation redirects. The provider's initial value was localhost; final
-confirmation of this setting is recorded after it is saved.
+- Verified Supabase Auth's production redirect is
+  `https://kanglish-web.vercel.app` after the Site URL was saved. The check generated
+  a recovery link for a disposable synthetic account without sending email,
+  inspected its redirect destination, and removed that exact account afterward.
