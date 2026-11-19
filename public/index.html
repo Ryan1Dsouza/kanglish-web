@@ -9,17 +9,39 @@
   <div class="card auth-card">
     <div class="eyebrow">KANGLISH ONLINE</div>
     <h1>Your words, understood.</h1>
-    <p>Sign in to translate Kanglish and Tuluglish and keep a private dictionary.</p>
+    <p id="auth-intro">Sign in to translate Kanglish and Tuluglish and keep a private dictionary.</p>
     <form id="auth-form">
       <label for="auth-email">Email</label>
       <input id="auth-email" type="email" autocomplete="email" required maxlength="254">
-      <label for="auth-password">Password</label>
+      <label for="auth-password" id="auth-password-label">Password</label>
       <input id="auth-password" type="password" autocomplete="current-password" required minlength="12" maxlength="1024">
-      <div class="auth-actions"><button class="primary" type="submit" data-action="login">Sign in</button><button type="submit" data-action="signup">Create account</button></div>
+      <div class="auth-actions" id="signin-actions"><button class="primary" type="submit" data-action="login">Sign in</button><button type="submit" data-action="signup">Create account</button></div>
+      <button type="submit" class="primary" id="send-reset-button" data-action="forgot-password" hidden>Send reset link</button>
+      <button type="button" id="forgot-password-button">Forgot password?</button>
+      <button type="button" id="back-to-signin-button" hidden>Back to sign in</button>
     </form>
     <p id="auth-message" role="status">Connecting securely…</p>
     <p class="subtle" id="provider-privacy">Online translation sends your message and context to the model provider. Your saved dictionary is private to your account.</p>
     <p class="subtle">New accounts require email confirmation. Use a password of at least 12 characters.</p>
+  </div>
+</main>
+<main class="auth-page" id="security-page" hidden>
+  <div class="card auth-card">
+    <div class="eyebrow">ACCOUNT SECURITY</div>
+    <h1 id="security-heading">Change password</h1>
+    <p id="security-intro">Confirm your current password and choose a new one.</p>
+    <form id="password-form">
+      <label for="current-password" id="current-password-label">Current password</label>
+      <input id="current-password" type="password" autocomplete="current-password" required minlength="12" maxlength="1024">
+      <label for="new-password">New password</label>
+      <input id="new-password" type="password" autocomplete="new-password" required minlength="12" maxlength="1024">
+      <label for="confirm-password">Confirm new password</label>
+      <input id="confirm-password" type="password" autocomplete="new-password" required minlength="12" maxlength="1024">
+      <button class="primary" type="submit">Save new password</button>
+      <button type="button" id="cancel-password-button">Cancel</button>
+    </form>
+    <p id="security-message" role="status"></p>
+    <p class="subtle">Use at least 12 characters. After changing your password, sign in again on your devices.</p>
   </div>
 </main>
 
@@ -100,7 +122,7 @@
       <details class="card"><summary>Add a word or phrase</summary><div class="dictionary-form"><label>Kanglish<input id="dictionary-original" maxlength="4000" placeholder="Word or phrase"></label><label>English<input id="dictionary-english" maxlength="4000" placeholder="Correct meaning"></label><button class="primary compact" id="dictionary-save">Save meaning</button></div></details>
       <p class="footnote">Your online dictionary is separate from the desktop and phone dictionaries. Export it to transfer approved meanings.</p>
     </section>
-    <footer><span>Kanglish Online · 10 translations/minute, 100/day</span><span id="log-location"></span><button id="logout-button">Sign out</button></footer>
+    <footer><span>Kanglish Online · 10 translations/minute, 100/day</span><span id="log-location"></span><button id="change-password-button">Change password</button><button id="logout-button">Sign out</button></footer>
   </main>
 </div>
 <script src="/auth.js"></script>

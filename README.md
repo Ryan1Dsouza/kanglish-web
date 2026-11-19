@@ -3,6 +3,9 @@
 The hosted version uses Vercel, Supabase email/password authentication and private
 per-user dictionaries. Online translation uses Gemini 3.5 Flash Lite, with all
 credentials held on the server. [Hosted setup and controls](docs/CLOUD_DEPLOYMENT.md).
+Use **Forgot password?** on the sign-in page to recover an account by email; open
+the reset link in the same browser. Signed-in users can select **Change password**
+in the footer and verify their current password before choosing a new one.
 
 Browser interface for translating Kanglish and Tuluglish to English with a local
 llama.cpp model, reviewing optional Gemini checks, and saving approved sentence
@@ -42,6 +45,8 @@ python scripts/security_check.py
 python -m unittest discover -s tests -p "test_desktop_*.py"
 node --check mobile/desktop/app.js
 node tests/desktop_web_state.test.cjs
+node tests/cloud_auth_state.test.cjs
+python -m unittest discover -s tests -p "test_cloud_*.py"
 gitleaks git . --pre-commit --staged --redact --no-banner
 gitleaks git . --redact --no-banner --log-opts=--all
 ```

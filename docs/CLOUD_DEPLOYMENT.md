@@ -10,6 +10,23 @@ The API supports a separately hosted private llama.cpp server through an explici
 
 ## Security behavior
 
+- **Forgot password?** sends a generic account-independent response and requests a
+  Supabase email recovery link using PKCE. Open the link in the same browser that
+  requested it. The one-time code is removed from the page URL before API calls;
+  its exchange requires a signed, one-hour HttpOnly verifier cookie. A separate
+  signed recovery cookie allows password reset for 15 minutes and cannot grant
+  access to the private workspace. Expired/used links require a new request.
+- **Change password** requires the current password to be reauthenticated against
+  the validated session owner's email. Both flows enforce 12–1,024 characters,
+  revoke Supabase refresh sessions globally and clear this browser's session
+  cookies after success. Previously issued access tokens may remain valid until
+  their Supabase expiry (at most one hour). Credentials never enter browser
+  storage or function logs. Password forms check confirmation before submitting.
+- Recovery and password updates retain CSRF/origin checks and shared SQL quotas:
+  20 requests/minute/IP, 30/day/IP, 40/minute globally per action, and five/day
+  per email/account (or IP for code exchange; email subjects are hashed). Quota-store failures block the
+  operation. Supabase's own email limits also apply; delivery requires working
+  Supabase email configuration.
 - Supabase access/refresh tokens are in Secure, HttpOnly, SameSite=Lax, host-only
   cookies. They are never returned to browser JavaScript or kept in localStorage.
   Every private read, write, run lookup and export validates the session and
@@ -69,6 +86,9 @@ The API supports a separately hosted private llama.cpp server through an explici
    the security guard, and Gitleaks staged/history scans before deploying.
 8. Deploy with `vercel --prod`, then test sign-in, private dictionary persistence,
    a labelled synthetic translation, cross-user denial and quota behavior.
+9. Check **Forgot password?** from the sign-in page and open the emailed link in
+   that same browser. The signed-in footer provides **Change password**. The
+   existing Site URL must match production so recovery redirects return here.
 
 Real environment files, provider keys, database credentials, local models,
 personal corrections and captures remain excluded from Git/Vercel uploads.

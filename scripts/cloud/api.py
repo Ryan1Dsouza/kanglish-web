@@ -1,5 +1,6 @@
 """Cookie-authenticated Vercel API with persistent user isolation and shared quotas."""
 from contextlib import contextmanager
+import base64
 import csv
 import hashlib
 import hmac
@@ -24,6 +25,9 @@ from scripts.training.prompt import RuntimeGlossary, build_prompt, literal
 ACCESS = '__Host-kanglish-access'
 REFRESH = '__Host-kanglish-refresh'
 CSRF = '__Host-kanglish-csrf'
+RECOVERY_VERIFIER = '__Host-kanglish-recovery-verifier'
+RECOVERY_SESSION = '__Host-kanglish-recovery'
+RESET_MESSAGE = 'If an account exists for that email, a password reset link has been sent. Open it in this browser.'
 MAX_BODY = 100_000
 MAX_IMPORT_BODY = 1_000_000
 GLOSSARY = None
@@ -79,11 +83,14 @@ class Config:
         self.inference_url = os.environ.get('INFERENCE_URL', '')
         self.inference_key = os.environ.get('INFERENCE_API_KEY', '')
         self.origins = set()
+        self.auth_origin = ''
         for name in ('APP_ORIGIN', 'VERCEL_PROJECT_PRODUCTION_URL', 'VERCEL_URL'):
             value = os.environ.get(name, '')
             if value:
                 value = value if value.startswith('https://') else 'https://' + value
                 self.origins.add(safe_endpoint(value))
+                if not self.auth_origin:
+                    self.auth_origin = safe_endpoint(value)
 
     @property
     def configured(self):
@@ -135,6 +142,10 @@ class Service:
                         {'key': 'ip:' + ip + ':' + action, 'seconds': 86400, 'limit': 20 if action == 'signup' else 2000 if action == 'refresh' else 100}]
             if action == 'signup':
                 buckets.append({'key': 'signup:global', 'seconds': 86400, 'limit': 20})
+        elif action in ('forgot-password', 'recovery', 'reset-password', 'change-password'):
+            buckets += [{'key': 'auth:' + action, 'seconds': 60, 'limit': 40},
+                        {'key': 'ip:' + ip + ':' + action, 'seconds': 86400, 'limit': 30},
+                        {'key': 'subject:' + subject + ':' + action, 'seconds': 86400, 'limit': 5}]
         else:
             per_minute, per_day = (10, 100) if action == 'translate' else (5, 20)
             buckets += [{'key': 'user:' + subject + ':' + action, 'seconds': 60, 'limit': per_minute},
@@ -315,6 +326,32 @@ def valid_dialect(value):
         raise APIError('Invalid dictionary name.')
     return value
 
+def password_value(value):
+    if not isinstance(value, str) or not 12 <= len(value) <= 1024:
+        raise APIError('Use a password of 12 to 1,024 characters.')
+    return value
+
+
+def seal_auth(value, purpose, secret):
+    payload = base64.urlsafe_b64encode(json.dumps({'value': value, 'at': int(time.time())}).encode()).decode().rstrip('=')
+    signature = hmac.new(secret.encode(), (purpose + ':' + payload).encode(), hashlib.sha256).hexdigest()
+    return payload + '.' + signature
+
+
+def open_auth(value, purpose, secret, lifetime):
+    try:
+        payload, signature = value.rsplit('.', 1)
+        expected = hmac.new(secret.encode(), (purpose + ':' + payload).encode(), hashlib.sha256).hexdigest()
+        if not hmac.compare_digest(signature, expected):
+            raise ValueError()
+        record = json.loads(base64.urlsafe_b64decode(payload + '=' * (-len(payload) % 4)))
+        if not 0 <= time.time() - record['at'] <= lifetime or not isinstance(record['value'], str) or not record['value']:
+            raise ValueError()
+        return record['value']
+    except (ValueError, TypeError, KeyError):
+        raise APIError('This reset link expired or was opened in a different browser. Request a new link here.', 400) from None
+
+
 def cookie(name, value, age=3600):
     jar = SimpleCookie()
     jar[name] = value
@@ -416,8 +453,19 @@ class CloudHandler(BaseHTTPRequestHandler):
                         except APIError as error:
                             if error.status != 401:
                                 raise
+                recovery_ready = False
+                if cookies.get(RECOVERY_SESSION):
+                    with service.budget('anonymous', fingerprint, 'refresh'):
+                        try:
+                            recovery_access = open_auth(cookies[RECOVERY_SESSION], 'recovery', config.service, 900)
+                            service.user(recovery_access)
+                            recovery_ready = True
+                        except APIError as error:
+                            if error.status not in (400, 401):
+                                raise
+                            self.out_cookies.append(cookie(RECOVERY_SESSION, '', 0))
                 return self.reply({'authenticated': bool(user), 'csrf': csrf, 'email': user.get('email') if user else None,
-                                   'can_refresh': bool(cookies.get(REFRESH)), 'provider': config.provider})
+                                   'can_refresh': bool(cookies.get(REFRESH)), 'provider': config.provider, 'recovery_ready': recovery_ready})
             if path in ('/api/auth/login', '/api/auth/signup', '/api/auth/refresh') and method == 'POST':
                 action = path.rsplit('/', 1)[-1]
                 with service.budget('anonymous', fingerprint, action):
@@ -447,8 +495,69 @@ class CloudHandler(BaseHTTPRequestHandler):
                         service.supabase('/auth/v1/logout?scope=local', 'POST', {}, access=access)
                     except APIError:
                         pass
-                self.out_cookies = [cookie(name, '', 0) for name in (ACCESS, REFRESH, CSRF)]
+                self.out_cookies = [cookie(name, '', 0) for name in (ACCESS, REFRESH, CSRF, RECOVERY_VERIFIER, RECOVERY_SESSION)]
                 return self.reply({'signed_out': True})
+            if path == '/api/auth/forgot-password' and method == 'POST':
+                email = bounded_text(body.get('email'), 'Email', 254).strip().lower()
+                if not re.fullmatch(r'[^\s@]+@[^\s@]+\.[^\s@]+', email):
+                    raise APIError('Enter a valid email address.')
+                subject = hmac.new(config.service.encode(), email.encode(), hashlib.sha256).hexdigest()[:32]
+                with service.budget(subject, fingerprint, 'forgot-password'):
+                    verifier = secrets.token_urlsafe(48)
+                    challenge = base64.urlsafe_b64encode(hashlib.sha256(verifier.encode()).digest()).decode().rstrip('=')
+                    service.supabase('/auth/v1/recover?' + urlencode({'redirect_to': config.auth_origin + '/?auth=recovery'}), 'POST',
+                                     {'email': email, 'code_challenge': challenge, 'code_challenge_method': 's256'})
+                    self.out_cookies += [cookie(RECOVERY_VERIFIER, seal_auth(verifier, 'verifier', config.service), 3600),
+                                         cookie(RECOVERY_SESSION, '', 0)]
+                    return self.reply({'message': RESET_MESSAGE})
+            if path == '/api/auth/recovery' and method == 'POST':
+                with service.budget(fingerprint, fingerprint, 'recovery'):
+                    verifier = open_auth(cookies.get(RECOVERY_VERIFIER, ''), 'verifier', config.service, 3600)
+                    code = bounded_text(body.get('code'), 'Reset code', 2048)
+                    try:
+                        result = service.supabase('/auth/v1/token?grant_type=pkce', 'POST', {'auth_code': code, 'code_verifier': verifier})
+                    except APIError as error:
+                        if error.status in (400, 401, 502):
+                            raise APIError('This reset link is invalid or already used. Request a new link.', 400) from None
+                        raise
+                    recovery_access = result.get('access_token', '')
+                    service.user(recovery_access)
+                    csrf = secrets.token_urlsafe(32)
+                    self.out_cookies += [cookie(RECOVERY_SESSION, seal_auth(recovery_access, 'recovery', config.service), 900),
+                                         cookie(RECOVERY_VERIFIER, '', 0), cookie(ACCESS, '', 0), cookie(REFRESH, '', 0), cookie(CSRF, csrf, 604800)]
+                    return self.reply({'recovery_ready': True, 'csrf': csrf})
+            if path in ('/api/auth/reset-password', '/api/auth/change-password') and method == 'POST':
+                action = path.rsplit('/', 1)[-1]
+                password = password_value(body.get('password'))
+                if action == 'reset-password':
+                    change_access = open_auth(cookies.get(RECOVERY_SESSION, ''), 'recovery', config.service, 900)
+                    user = service.user(change_access)
+                else:
+                    user = service.user(access)
+                    change_access = access
+                with service.budget(user['id'], fingerprint, action):
+                    if action == 'change-password':
+                        current_password = password_value(body.get('current_password'))
+                        if current_password == password:
+                            raise APIError('Choose a new password that differs from your current password.')
+                        try:
+                            fresh = service.supabase('/auth/v1/token?grant_type=password', 'POST',
+                                                     {'email': user['email'], 'password': current_password})
+                        except APIError as error:
+                            if error.status in (400, 401, 502):
+                                raise APIError('Your current password could not be verified. Try again or use Forgot password.', 400) from None
+                            raise
+                        change_access = fresh.get('access_token', '')
+                        if service.user(change_access)['id'] != user['id']:
+                            raise APIError('The account could not be verified.', 403)
+                    service.supabase('/auth/v1/user', 'PUT', {'password': password}, access=change_access)
+                    try:
+                        service.supabase('/auth/v1/logout?scope=global', 'POST', {}, access=change_access)
+                    except APIError:
+                        self.out_cookies = [cookie(name, '', 0) for name in (ACCESS, REFRESH, CSRF, RECOVERY_VERIFIER, RECOVERY_SESSION)]
+                        raise APIError('Your password changed, but ending other sessions could not be confirmed. Sign in with your new password.', 503) from None
+                    self.out_cookies = [cookie(name, '', 0) for name in (ACCESS, REFRESH, CSRF, RECOVERY_VERIFIER, RECOVERY_SESSION)]
+                    return self.reply({'password_changed': True, 'message': 'Password changed. Sign in with your new password.'})
             with service.budget('preauth', fingerprint, 'preauth'):
                 user = service.user(access)
             with service.budget(user['id'], fingerprint):

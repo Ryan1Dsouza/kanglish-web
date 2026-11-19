@@ -5,6 +5,8 @@
 .auth-card form{display:grid;gap:12px;margin-top:24px}
 .auth-card input{width:100%;padding:12px;border:1px solid #d9d4c9;border-radius:10px}
 .auth-actions{display:flex;gap:12px;margin:10px 0}
-#auth-message{min-height:24px}
-#auth-message.error{color:#a33}
-#logout-button{padding:4px 12px}
+#auth-message,#security-message{min-height:24px}
+#auth-message.error,#security-message.error{color:#a33}
+#logout-button,#change-password-button{padding:4px 12px}
+.auth-actions{flex-wrap:wrap}
+@media(max-width:540px){.auth-page{padding:16px}.auth-card{padding:24px}.auth-card h1{font-size:30px}}
