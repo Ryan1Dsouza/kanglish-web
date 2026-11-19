@@ -1,0 +1,11 @@
+.language-controls { display:flex; align-items:end; flex-wrap:wrap; gap:16px; margin:0 0 18px; }
+.language-controls label { display:grid; gap:7px; font-size:12px; min-width:170px; }
+select { font:inherit; color:var(--ink); background:#fcfdf9; border:1px solid var(--line); border-radius:8px; padding:10px; max-width:100%; }
+.dictionary-form select { display:block; width:100%; margin-top:9px; }
+.audio-controls, #audio-draft { display:flex; align-items:center; gap:9px; flex-wrap:wrap; margin:14px 0; }
+.audio-file-label { font-size:12px; background:#fff; border:1px solid var(--line); padding:10px 13px; border-radius:8px; cursor:pointer; }
+#audio-preview { width:100%; max-width:340px; }
+.dialect-switcher-area { overflow:auto; max-height:42vh; }
+.dialect-pill { line-height:1.4; text-align:left; }
+select:focus-visible, .audio-file-label:focus-within { outline:3px solid #85bba2; outline-offset:3px; }
+@media(max-width:500px) { .language-controls label { min-width:125px; flex:1; } #selected-direction { flex-basis:100%; } }

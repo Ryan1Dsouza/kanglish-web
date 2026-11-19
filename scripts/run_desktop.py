@@ -31,7 +31,7 @@ MAX_BATCH_CASES = 500
 MAX_BULK_TEXT_CHARS = 640000
 MAX_BULK_WORD_MAPPINGS = 10000
 MAX_REQUEST_BYTES = 5_000_000
-WORD_TOKEN = re.compile(r"(?<![\w.@/+#])[.@]?\w+(?:[-'’./@]\w+)*(?:\+\+|#|\+)?(?![\w@/+#]|[.-](?=\w))")
+WORD_TOKEN = re.compile(r"(?<![\w\u0c80-\u0cff.@/+#])[.@]?[\w\u0c80-\u0cff]+(?:[-'’./@][\w\u0c80-\u0cff]+)*(?:\+\+|#|\+)?(?![\w\u0c80-\u0cff@/+#]|[.-](?=[\w\u0c80-\u0cff]))")
 FIELDS = ["timestamp", "case_id", "source_label", "category", "training_coverage", "input",
           "expected_meaning", "original_offline_output", "offline_latency_s", "offline_source",
           "validator_output", "verification_latency_s", "assessment", "action_taken",
@@ -152,7 +152,7 @@ def merge_word_meanings(*meanings):
     return bounded_text(" / ".join(alternatives), "Combined word meaning", 400)
 
 
-def parse_sentence_batch(text):
+def parse_sentence_batch(text, target_label='English', source_label='Kanglish'):
     """Read supplied translations and explicit word meanings without model calls."""
     text = bounded_text(text, "Batch text", MAX_BULK_TEXT_CHARS)
     blocks, current, field, item_number = [], {}, None, None
@@ -166,7 +166,7 @@ def parse_sentence_batch(text):
     # Accept any source-language label that isn't English or Word Mapping
     # so Tuluglish:, Kanglish:, or any future dialect label all work.
     labels = re.compile(r"^(?:[-*•]\s+)?(?:\*\*)?(English|Word\s+Mappings?|[A-Za-z][A-Za-z0-9_-]*)(?:\*\*)?\s*:\s*(?:\*\*)?(.*)$", re.I)
-    ENGLISH_FIELDS = {"english"}
+    ENGLISH_FIELDS = {target_label.lower()}
     MAPPING_FIELDS = {"word mapping", "word mappings"}
     for line_number, raw in enumerate(text.splitlines(), 1):
         line = raw.strip()
@@ -175,7 +175,7 @@ def parse_sentence_batch(text):
         number = re.fullmatch(r"(\d+)[.)]", line)
         if number:
             if not current and item_number is not None:
-                raise ValueError(f'Item {item_number}: add the source sentence and English translation.')
+                raise ValueError(f'Item {item_number}: add the source sentence and {target_label} translation.')
             finish_item()
             item_number = int(number[1])
             continue
@@ -194,24 +194,24 @@ def parse_sentence_batch(text):
             if field in current:
                 raise ValueError(f"Line {line_number}: duplicate {label} field in the same item.")
             if field == 'mappings' and not {'original', 'english'} <= current.keys():
-                raise ValueError(f"Line {line_number}: add both the source language and English before Word Mapping.")
+                raise ValueError(f"Line {line_number}: add both the source language and {target_label} before Word Mapping.")
             current[field] = match[2].strip()
         elif field:
             current[field] += "\n" + line
         else:
-            raise ValueError(f"Line {line_number}: expected a source label (Kanglish:, Tuluglish:), English:, or Word Mapping:.")
+            raise ValueError(f"Line {line_number}: expected a source label ({source_label}:), {target_label}:, or Word Mapping:.")
     if current:
         finish_item()
     elif item_number is not None:
-        raise ValueError(f'Item {item_number}: add the source sentence and English translation.')
+        raise ValueError(f'Item {item_number}: add the source sentence and {target_label} translation.')
     if not 1 <= len(blocks) <= MAX_BATCH_CASES:
         raise ValueError(f"Paste between 1 and {MAX_BATCH_CASES} sentence items per batch.")
     result, total_words, skipped_mappings = [], 0, []
     for index, block in enumerate(blocks, 1):
         index = block['item']
         try:
-            original = bounded_text(block.get("original"), "Kanglish sentence")
-            english = bounded_text(block.get("english"), "English translation")
+            original = bounded_text(block.get("original"), source_label + " sentence")
+            english = bounded_text(block.get("english"), target_label + " translation")
             parsed = parse_word_mappings(block["mappings"], original, allow_empty=True) if "mappings" in block else {"terms": [], "ignored": [], "notes": []}
             if parsed["ignored"]:
                 parsed["notes"].append("Skipped mappings that are not shorter contiguous phrases in this sentence: " + ", ".join(parsed["ignored"]))

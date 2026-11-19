@@ -29,12 +29,25 @@ def build():
     }
     for before, after in replacements.items():
         html = html.replace(before, after)
+    features = ROOT / 'web'
+    html = html.replace('<div class="translation-grid">', (features / 'translation_controls.html').read_text(encoding='utf-8') + '<div class="translation-grid">', 1)
+    html = html.replace('<span>Kanglish</span><span class="subtle">Kannada · English letters</span>', '<span id="source-heading">Kanglish</span><span class="subtle" id="source-script">Kannada · English letters</span>', 1)
+    html = html.replace('<span>English</span><span class="pill muted" id="result-engine">', '<span id="target-heading">English</span><span class="pill muted" id="result-engine">', 1)
+    html = html.replace('<label class="sr-only" for="message">Kanglish message</label>', '<label class="sr-only" for="message">Message to translate</label>')
+    html = html.replace('<details><summary>Add previous-message context</summary>', (features / 'audio_controls.html').read_text(encoding='utf-8') + '<details><summary>Add previous-message context</summary>', 1)
+    html = html.replace('<button id="copy-button" disabled>Copy</button>', '<button id="copy-button" disabled>Copy</button><button id="read-aloud" disabled>Read aloud</button><button id="stop-playback">Stop audio</button>', 1)
+    html = html.replace('<p id="result-warning" class="warning" hidden></p>', '<p id="result-warning" class="warning" hidden></p><p id="playback-status" class="subtle" role="status"></p>', 1)
+    html = html.replace('<label for="own-correction">', '<label id="correction-label" for="own-correction">', 1)
+    html = html.replace('<label>Kanglish<input id="dictionary-original"', '<label><span id="dictionary-source-label">Kanglish</span><input id="dictionary-original"')
+    html = html.replace('<label>English<input id="dictionary-english"', '<label><span id="dictionary-target-label">English</span><input id="dictionary-english"')
+    html = html.replace('<details class="card dictionary-import-card"', (features / 'dictionary_controls.html').read_text(encoding='utf-8') + '<details class="card dictionary-import-card"', 1)
+    html = html.replace('KANNADA, IN YOUR OWN WORDS', 'YOUR LANGUAGE, YOUR WORDS').replace('Write Kannada in English letters. Get the meaning in English.', 'Choose the languages, type a message or translate a recording.')
     login = '''
 <main class="auth-page" id="auth-page">
   <div class="card auth-card">
     <div class="eyebrow">KANGLISH ONLINE</div>
     <h1>Your words, understood.</h1>
-    <p id="auth-intro">Sign in to translate Kanglish and Tuluglish and keep a private dictionary.</p>
+    <p id="auth-intro">Sign in to translate English, Kanglish, Tuluglish, Kannada and Tulu, by text or audio.</p>
     <form id="auth-form">
       <label for="auth-email">Email</label>
       <input id="auth-email" type="email" autocomplete="email" required maxlength="254">
@@ -46,7 +59,7 @@ def build():
       <button type="button" id="back-to-signin-button" hidden>Back to sign in</button>
     </form>
     <p id="auth-message" role="status">Connecting securely…</p>
-    <p class="subtle" id="provider-privacy">Online translation sends your message and context to the model provider. Your saved dictionary is private to your account.</p>
+    <p class="subtle" id="provider-privacy">Online translation sends your message, context or submitted audio to the model provider. Your saved dictionary is private to your account.</p>
     <p class="subtle">New accounts require email confirmation. Use a password of at least 12 characters.</p>
   </div>
 </main>
@@ -98,9 +111,17 @@ def build():
     });
   }
 ''' + marker, 1)
+    js = js.replace('sourceLabel.textContent = "Kanglish word or phrase"; meaningLabel.textContent = "English meaning";', 'sourceLabel.textContent = hostedName(hostedPair().source_language) + " word or phrase"; meaningLabel.textContent = hostedName(hostedPair().target_language) + " meaning";')
+    js = js.replace('const srcLabel = {kanglish: "Kanglish → English", tuluglish: "Tuluglish → English"}[activeDialect] || `${activeDialect} → English`;', 'const srcLabel = hostedPair().label;')
+    hook = '$("message").addEventListener("input", invalidateInput);'
+    if hook not in js:
+        raise RuntimeError('Hosted feature insertion point is missing.')
+    js = js.replace(hook, (features / 'app_features.js').read_text(encoding='utf-8') + '\n' + hook, 1)
     (destination / 'app.js').write_text(js, encoding='utf-8')
     for name in ('style.css', 'glossary.css'):
         (destination / name).write_bytes((source / name).read_bytes())
+    with (destination / 'glossary.css').open('a', encoding='utf-8') as output:
+        output.write('\n' + (features / 'features.css').read_text(encoding='utf-8'))
     print('Built hosted website in public/.')
 
 if __name__ == '__main__':

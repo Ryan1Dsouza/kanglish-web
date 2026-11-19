@@ -1,0 +1,11 @@
+<div class="audio-controls">
+  <button id="record-audio" type="button">Record microphone</button>
+  <button id="stop-recording" type="button" hidden>Stop recording</button>
+  <label class="audio-file-label" for="audio-file">Choose audio file<input id="audio-file" type="file" accept="audio/*" class="sr-only"></label>
+</div>
+<div id="audio-draft" hidden>
+  <audio id="audio-preview" controls></audio>
+  <button id="translate-audio" type="button">Translate audio</button>
+  <button id="discard-audio" type="button">Discard audio</button>
+</div>
+<p id="audio-status" class="subtle" role="status">Record up to 30 seconds or choose a WAV, MP3, M4A, WebM, Ogg or FLAC file under 1 MB. Recordings stay in this page until you click Translate audio. Audio uses a separate limit of 5 requests/minute and 20/day.</p>

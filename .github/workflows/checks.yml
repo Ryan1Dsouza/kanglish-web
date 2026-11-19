@@ -21,6 +21,7 @@ jobs:
           node --check public/auth.js
           node tests/desktop_web_state.test.cjs
           node tests/cloud_auth_state.test.cjs
+          node tests/cloud_translation_state.test.cjs
       - name: Verify Gitleaks release and scan files plus full history
         shell: bash
         run: |

@@ -9,7 +9,7 @@
   <div class="card auth-card">
     <div class="eyebrow">KANGLISH ONLINE</div>
     <h1>Your words, understood.</h1>
-    <p id="auth-intro">Sign in to translate Kanglish and Tuluglish and keep a private dictionary.</p>
+    <p id="auth-intro">Sign in to translate English, Kanglish, Tuluglish, Kannada and Tulu, by text or audio.</p>
     <form id="auth-form">
       <label for="auth-email">Email</label>
       <input id="auth-email" type="email" autocomplete="email" required maxlength="254">
@@ -21,7 +21,7 @@
       <button type="button" id="back-to-signin-button" hidden>Back to sign in</button>
     </form>
     <p id="auth-message" role="status">Connecting securely…</p>
-    <p class="subtle" id="provider-privacy">Online translation sends your message and context to the model provider. Your saved dictionary is private to your account.</p>
+    <p class="subtle" id="provider-privacy">Online translation sends your message, context or submitted audio to the model provider. Your saved dictionary is private to your account.</p>
     <p class="subtle">New accounts require email confirmation. Use a password of at least 12 characters.</p>
   </div>
 </main>
@@ -63,21 +63,39 @@
     <header class="topbar"><span>WORKSPACE / <strong id="breadcrumb">TRANSLATE</strong></span><span class="pill" id="runtime-badge">Starting up</span></header>
     <div id="notice" role="status" hidden></div>
     <section id="translate-view" class="view">
-      <div class="intro"><div class="eyebrow">KANNADA, IN YOUR OWN WORDS</div><h1>A little easier to understand.</h1><p>Write Kannada in English letters. Get the meaning in English.</p></div>
-      <div class="translation-grid">
-        <div class="card input-card"><div class="card-heading"><span>Kanglish</span><span class="subtle">Kannada · English letters</span></div>
-          <label class="sr-only" for="message">Kanglish message</label><textarea id="message" maxlength="1000" placeholder="Try: naale beligge sigona" spellcheck="false"></textarea>
-          <details><summary>Add previous-message context</summary><label class="sr-only" for="context">Previous message</label><textarea id="context" maxlength="500" placeholder="Optional: the previous message, to explain the conversation"></textarea></details>
+      <div class="intro"><div class="eyebrow">YOUR LANGUAGE, YOUR WORDS</div><h1>A little easier to understand.</h1><p>Choose the languages, type a message or translate a recording.</p></div>
+      <div class="language-controls">
+  <label for="source-language">From<select id="source-language" aria-label="Source language"></select></label>
+  <button id="swap-languages" type="button" aria-label="Swap languages" title="Swap languages">⇄</button>
+  <label for="target-language">To<select id="target-language" aria-label="Target language"></select></label>
+  <span class="subtle" id="selected-direction"></span>
+</div>
+<p class="subtle">Kanglish and Tuluglish use English letters. Kannada and Tulu use Kannada script. Text and submitted recordings are sent to Google for translation.</p>
+<div class="translation-grid">
+        <div class="card input-card"><div class="card-heading"><span id="source-heading">Kanglish</span><span class="subtle" id="source-script">Kannada · English letters</span></div>
+          <label class="sr-only" for="message">Message to translate</label><textarea id="message" maxlength="1000" placeholder="Try: naale beligge sigona" spellcheck="false"></textarea>
+          <div class="audio-controls">
+  <button id="record-audio" type="button">Record microphone</button>
+  <button id="stop-recording" type="button" hidden>Stop recording</button>
+  <label class="audio-file-label" for="audio-file">Choose audio file<input id="audio-file" type="file" accept="audio/*" class="sr-only"></label>
+</div>
+<div id="audio-draft" hidden>
+  <audio id="audio-preview" controls></audio>
+  <button id="translate-audio" type="button">Translate audio</button>
+  <button id="discard-audio" type="button">Discard audio</button>
+</div>
+<p id="audio-status" class="subtle" role="status">Record up to 30 seconds or choose a WAV, MP3, M4A, WebM, Ogg or FLAC file under 1 MB. Recordings stay in this page until you click Translate audio. Audio uses a separate limit of 5 requests/minute and 20/day.</p>
+<details><summary>Add previous-message context</summary><label class="sr-only" for="context">Previous message</label><textarea id="context" maxlength="500" placeholder="Optional: the previous message, to explain the conversation"></textarea></details>
           <div class="input-footer"><label class="check"><input type="checkbox" id="use-memory" checked> Use saved meanings</label><span id="char-count">0 / 1,000</span></div>
           <button class="primary" id="translate-button" disabled>Translate <span>↗</span></button>
         </div>
-        <div class="card output-card"><div class="card-heading"><span>English</span><span class="pill muted" id="result-engine">Online model</span></div>
-          <p class="result placeholder" id="translation">Your translation will appear here.</p><p id="timing" class="subtle"></p><p id="result-warning" class="warning" hidden></p>
-          <div class="result-actions"><button id="copy-button" disabled>Copy</button><button id="save-local-button" disabled>Save this meaning</button><button id="verify-button" disabled>Verify translation</button></div>
+        <div class="card output-card"><div class="card-heading"><span id="target-heading">English</span><span class="pill muted" id="result-engine">Online model</span></div>
+          <p class="result placeholder" id="translation">Your translation will appear here.</p><p id="timing" class="subtle"></p><p id="result-warning" class="warning" hidden></p><p id="playback-status" class="subtle" role="status"></p>
+          <div class="result-actions"><button id="copy-button" disabled>Copy</button><button id="read-aloud" disabled>Read aloud</button><button id="stop-playback">Stop audio</button><button id="save-local-button" disabled>Save this meaning</button><button id="verify-button" disabled>Verify translation</button></div>
         </div>
       </div>
       <div class="card verification-card" id="verification-card" hidden><div class="card-heading"><span>Translation check</span><span class="pill" id="verdict"></span></div><p class="result" id="verified-translation"></p><p id="verification-explanation" class="subtle"></p><p id="verification-timing" class="subtle"></p><button class="primary compact" id="save-verified-button" hidden>Use this correction</button><p class="subtle">A second opinion. Check the meaning before saving.</p></div>
-      <details class="card correction-card" id="correction-details"><summary>Use your own correction</summary><label for="own-correction">The correct English meaning</label><textarea id="own-correction" maxlength="4000" placeholder="Enter the translation you want Kanglish to remember"></textarea><button id="save-own-button" class="primary compact" disabled>Save correction</button><span id="saved-status" role="status"></span></details>
+      <details class="card correction-card" id="correction-details"><summary>Use your own correction</summary><label id="correction-label" for="own-correction">The correct English meaning</label><textarea id="own-correction" maxlength="4000" placeholder="Enter the translation you want Kanglish to remember"></textarea><button id="save-own-button" class="primary compact" disabled>Save correction</button><span id="saved-status" role="status"></span></details>
       <div class="card glossary-card" id="glossary-card" hidden>
         <div class="card-heading"><span>Teach the words in this sentence</span><span class="pill muted">Optional</span></div>
         <p class="subtle" id="glossary-parent"></p>
@@ -108,7 +126,16 @@
     </section>
     <section id="dictionary-view" class="view" hidden>
       <div class="intro"><div class="eyebrow">MEANINGS WORTH KEEPING</div><h1>Your words, remembered.</h1><p>Corrections saved in your private account. Export them to share or import elsewhere.</p></div>
-      <details class="card dictionary-import-card" id="dictionary-bulk-panel"><summary>Bulk Import / Paste Batch</summary>
+      <details class="card" id="create-dictionary-panel"><summary>Create a dictionary</summary>
+  <div class="dictionary-form">
+    <label>Name<input id="new-dictionary-name" maxlength="80" placeholder="My travel phrases"></label>
+    <label>From<select id="new-dictionary-source"></select></label>
+    <label>To<select id="new-dictionary-target"></select></label>
+    <button id="create-dictionary" class="primary compact" type="button">Create dictionary</button>
+  </div>
+  <p class="subtle">Choose different source and target languages. Empty dictionaries are saved in your account. Your account can store up to 10 dictionaries.</p>
+</details>
+<details class="card dictionary-import-card" id="dictionary-bulk-panel"><summary>Bulk Import / Paste Batch</summary>
         <p class="subtle">Paste numbered sentence translations and their word mappings together. English and Kanglish can appear in either order. Word Mapping is optional. Complete each item before importing. Conflicting duplicates keep the first occurrence; later conflicts, existing conflicts and unmatched word mappings are skipped and reported while the rest is saved. Different meanings of a word are kept as alternatives, linked to their sentences.</p>
         <label for="dictionary-bulk-text">Sentences and word meanings</label>
         <textarea id="dictionary-bulk-text" maxlength="640000" spellcheck="false" placeholder="1.&#10;Kanglish: Neevu hegiddeera?&#10;English: How are you?&#10;Word Mapping: Neevu -> You, hegiddeera -> how are you&#10;&#10;2.&#10;Kanglish: Nanna hesaru Rahul.&#10;English: My name is Rahul.&#10;Word Mapping: Nanna -> My, hesaru -> name, Rahul -> Rahul"></textarea>
@@ -119,7 +146,7 @@
         <p class="subtle">Up to 500 sentences and 10,000 word mappings per batch. Review meanings before importing; this saves your supplied translations without calling an AI. Export dictionary includes both sentences and linked words.</p>
       </details>
       <div class="card"><div class="card-heading"><label for="dictionary-search">Saved translations <span id="dictionary-count"></span></label><a class="button" id="export-dict-link" href="/api/corrections.json" download>Export dictionary</a><button id="dictionary-delete-button" disabled>Delete dictionary</button></div><input id="dictionary-search" type="search" placeholder="Search a word, name, or meaning"><div id="dictionary-rows"></div></div>
-      <details class="card"><summary>Add a word or phrase</summary><div class="dictionary-form"><label>Kanglish<input id="dictionary-original" maxlength="4000" placeholder="Word or phrase"></label><label>English<input id="dictionary-english" maxlength="4000" placeholder="Correct meaning"></label><button class="primary compact" id="dictionary-save">Save meaning</button></div></details>
+      <details class="card"><summary>Add a word or phrase</summary><div class="dictionary-form"><label><span id="dictionary-source-label">Kanglish</span><input id="dictionary-original" maxlength="4000" placeholder="Word or phrase"></label><label><span id="dictionary-target-label">English</span><input id="dictionary-english" maxlength="4000" placeholder="Correct meaning"></label><button class="primary compact" id="dictionary-save">Save meaning</button></div></details>
       <p class="footnote">Your online dictionary is separate from the desktop and phone dictionaries. Export it to transfer approved meanings.</p>
     </section>
     <footer><span>Kanglish Online · 10 translations/minute, 100/day</span><span id="log-location"></span><button id="change-password-button">Change password</button><button id="logout-button">Sign out</button></footer>

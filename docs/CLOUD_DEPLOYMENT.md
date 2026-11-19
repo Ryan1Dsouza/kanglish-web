@@ -4,7 +4,7 @@ The hosted UI runs on Vercel. The Python API validates Supabase sessions before
 accessing private data. Supabase provides authentication, durable owner-scoped
 dictionaries and history, and atomic shared quotas. Google Gemini 3.5 Flash Lite
 is the selected external translation/review service. The site's privacy text
-explains that messages, context and relevant saved examples can be sent to Google.
+explains that messages, context, relevant saved examples and submitted audio can be sent to Google.
 The API supports a separately hosted private llama.cpp server through an explicit
 `TRANSLATION_PROVIDER=llama` configuration; it never exposes the local desktop server.
 
@@ -38,7 +38,8 @@ The API supports a separately hosted private llama.cpp server through an explici
   to the same origin and prevent framing. Provider URLs come only from server
   configuration; HTTPS, response-size limits, timeouts and redirect refusal apply.
 - Translation: 10/minute and 100/day per user. Verification: 5/minute and 20/day
-  per user. A global cap of 200 inference/review reservations per UTC day protects
+  per user. Audio transcription/translation: 5/minute and 20/day per user. A global
+  cap of 200 text, audio and review reservations per UTC day protects
   the provider budget. IP/auth/API burst limits apply separately. Quotas are
   transactional fixed windows; failed attempts count and there are no automatic
   provider retries. Quota-store failures block inference.
@@ -49,6 +50,24 @@ The API supports a separately hosted private llama.cpp server through an explici
   disabled. Dictionary imports separately allow 500 sentences/10,000 mappings/
   640,000 characters within a 1 MB request, with shared limits of five import or
   preview requests/minute and 50/day per user. Imports do not call a model.
+- Audio accepts WAV, MP3, M4A, WebM, Ogg and FLAC, limited to 1 MB decoded audio
+  and 1.5 MB JSON requests. Microphone recording stops after 30 seconds. Preview
+  is local until **Translate audio** sends the recording to Google. One provider
+  request returns the transcript and translation. Unclear speech is rejected;
+  recordings are not stored. Transcript/result history follows the private history
+  retention below. Dictionary saving remains an explicit action. Audio keeps the
+  same session, CSRF, owner, quota and shared inference-lease controls as text.
+- From/To selectors support all 20 distinct pairs among `en`, `kn-Latn`,
+  `tcy-Latn`, `kn-Knda`, `tcy-Knda`. Kanglish/Tuluglish use Latin letters;
+  Kannada/Tulu use Kannada script. Swap reverses languages and moves a completed
+  translation into the input; it invalidates the old result before saving/review.
+  Named dictionaries persist their immutable direction in snapshot metadata.
+  Built-in directions are available without storing 20 empty dictionaries; the
+  existing 10 stored dictionaries/account cap still applies. No schema migration
+  is required. Older dictionary snapshots retain their original direction.
+- Read-aloud uses the browser's installed language voices. Missing Kannada or
+  Tulu voices produce a visible message. Latin-spelling pronunciation depends on
+  the installed voice; playback is separate from provider audio transcription.
 - Each dictionary is bounded to 2 MB/5,000 entries and 10,000 contextual links,
   with at most 10 dictionaries
   per account. Dictionaries use version checks and transactionally commit saved
@@ -56,8 +75,8 @@ The API supports a separately hosted private llama.cpp server through an explici
 - Dictionary deletion requires a named confirmation and the reviewed version.
   A concurrent update rejects deletion with a conflict; the user must review and
   confirm again. The database deletes only the authenticated owner's dictionary.
-  Versions stay distinct if the same name is recreated. Built-in Kanglish and
-  Tuluglish selectors remain available with zero entries after deletion.
+  Versions stay distinct if the same name is recreated. Built-in language
+  directions remain available with zero entries after deletion.
 - Numbered imports accept English/source text in either order and preserve supplied
   numbering and wording. Incomplete items and malformed mappings reject the batch;
   the parser does not silently fill or correct translations. Later sentence/type
@@ -105,6 +124,11 @@ translations are not the local trained Gemma model and do not reuse its accuracy
 claims, weights or latency scores. Prompts and quotas also differ. Local model,
 training selections and historical evidence remain in the original repository.
 Memory changes only approved meanings/examples; it does not train the model.
+The hosted prompt now explicitly selects both language and writing system for
+text and verification. Native-script output is checked; audio adds a structured
+transcript/translation response with uncertainty rejection. These changes are
+not a new accuracy benchmark. The optional llama provider supports the existing
+English-involving directions; non-English pairs and native Tulu input need Gemini.
 
 References:
 - [Vercel Python functions](https://vercel.com/docs/functions/runtimes/python)

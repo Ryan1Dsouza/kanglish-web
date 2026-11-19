@@ -4,12 +4,14 @@ import json
 import sqlite3
 
 from scripts.run_desktop import App, Store
+from scripts.cloud.languages import direction
 
 class MemoryStore(Store):
     def __init__(self, payload=None, run=None):
         self.db = sqlite3.connect(':memory:')
         super().__init__(':memory:')
         payload = payload or {'corrections': [], 'links': []}
+        self.metadata = payload.get('dictionary')
         for table, rows in (('corrections', payload['corrections']), ('glossary_links', payload['links'])):
             for row in rows:
                 columns = list(row)
@@ -35,8 +37,27 @@ class MemoryStore(Store):
             cursor = self.db.execute(f'SELECT * FROM {table}')
             columns = [column[0] for column in cursor.description]
             result[field] = [dict(zip(columns, row)) for row in cursor.fetchall()]
+        if self.metadata:
+            result['dictionary'] = self.metadata
         if len(result['corrections']) > 5000 or len(result['links']) > 10000 or len(json.dumps(result).encode()) > 2097152:
             raise ValueError('Your dictionary has reached its storage limit. Export and remove older entries first.')
+        return result
+
+    def set_direction(self, name, source, target, label):
+        candidate = {'name': name, 'label': label, 'source_language': source, 'target_language': target}
+        validated = direction(name, candidate)
+        if self.metadata and any(validated[k] != self.metadata[k] for k in ('source_language', 'target_language')):
+            raise ValueError('This dictionary already has a different translation direction.')
+        if self.corrections(name):
+            direction(name, self.metadata, candidate)
+        self.metadata = validated
+        return {**validated, 'count': len(self.corrections(name))}
+
+    def export(self, dialect='kanglish'):
+        result = super().export(dialect)
+        pair = direction(dialect, self.metadata)
+        for row in result:
+            row.update(source_language=pair['source_language'], target_language=pair['target_language'], dictionary=dialect)
         return result
 
     def save(self, original, english, source, source_label='user_input_unreviewed', kind='sentence', dialect='kanglish'):

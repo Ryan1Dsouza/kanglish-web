@@ -1,5 +1,19 @@
 # Hosted verification — 2026-11-19
 
+## Language directions and audio
+
+- Generated hosted UI tests cover all 20 language pairs, five options per menu,
+  swapping text and invalidating saved-result actions, custom dictionary creation,
+  recording permission denial, stop/error track cleanup, file preview/discard,
+  explicit audio submission and missing-voice feedback. Devices and providers are
+  mocked; these checks do not establish physical microphone or voice quality.
+- Six new standard-library API tests cover direction/script contracts, empty
+  dictionary persistence, immutable metadata, owner isolation, export metadata,
+  reverse imports, Kannada combining marks, audio auth/CSRF/origin/quota denial,
+  payload limits, uncertain speech and private history without automatic saving.
+- Automated checks make no paid provider calls. No original protected datasets,
+  historical weights or recorded accuracy scores are changed.
+
 - Provisioned a dedicated Supabase Free Plan database in Mumbai, connected to
   Vercel production/development only. Model/provider secrets are server-only.
 - Deployed production at https://kanglish-web.vercel.app.
