@@ -664,12 +664,12 @@ class CloudHandler(BaseHTTPRequestHandler):
                     return self.reply(result)
                 if method == 'GET' and path == '/api/dictionaries/details':
                     counts = service.supabase('/rest/v1/rpc/web_dictionary_counts', 'POST', {}, access=access)
-                    entries = {name: {**pair, 'count': counts.get(name, 0)} for name, pair in DEFAULTS.items()}
+                    entries = {name: {**pair, 'count': counts.get(name, 0), 'stored': name in counts} for name, pair in DEFAULTS.items()}
                     for saved in service.query('web_dictionaries', user, access, select='dialect,dictionary:payload->dictionary'):
                         name = saved.get('dialect')
                         if name:
                             pair = direction(name, saved.get('dictionary'))
-                            entries[name] = {**pair, 'label': pair.get('label', name), 'count': counts.get(name, 0)}
+                            entries[name] = {**pair, 'label': pair.get('label', name), 'count': counts.get(name, 0), 'stored': True}
                     return self.reply(list(entries.values()))
                 if method == 'POST' and path == '/api/dictionaries/create':
                     name = valid_dialect(body.get('name'))

@@ -76,7 +76,13 @@ The API supports a separately hosted private llama.cpp server through an explici
   A concurrent update rejects deletion with a conflict; the user must review and
   confirm again. The database deletes only the authenticated owner's dictionary.
   Versions stay distinct if the same name is recreated. Built-in language
-  directions remain available with zero entries after deletion.
+  directions remain available in the translation menus after deletion. The left
+  sidebar lists only dictionaries stored in the authenticated account, including
+  empty named dictionaries. Its Delete buttons use the same named/versioned
+  confirmation as the dictionary page. Deleted rows stay absent after reload;
+  unsaved language choices and old history results do not re-add them. Saving or
+  creating a dictionary makes it appear again. Pending dictionary reads are
+  invalidated after deletion so an old response cannot restore removed entries.
 - Numbered imports accept English/source text in either order and preserve supplied
   numbering and wording. Incomplete items and malformed mappings reject the batch;
   the parser does not silently fill or correct translations. Later sentence/type

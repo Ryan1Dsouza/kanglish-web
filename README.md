@@ -10,6 +10,9 @@ private named dictionaries in either direction, including English → Kanglish a
 English → Tuluglish. Translate microphone recordings (up to 30 seconds) or audio
 files under 1 MB into a transcript and translation, then review before saving.
 Read-aloud uses installed browser voices and reports missing Kannada/Tulu voices.
+The left sidebar lists saved dictionaries, including empty ones you create. Use
+**Delete** beside a dictionary to remove its entries and its sidebar row after
+confirmation. Translation language choices remain available independently.
 Use **Forgot password?** on the sign-in page to recover an account by email; open
 the reset link in the same browser. Signed-in users can select **Change password**
 in the footer and verify their current password before choosing a new one.

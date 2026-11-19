@@ -39,6 +39,12 @@ class HostedLanguageAudioTests(unittest.TestCase):
             return {'conflict': False}
         if path.endswith('/web_dictionary_counts'):
             return {name: len(saved['payload']['corrections']) for name, saved in self.data[owner].get('dictionaries', {}).items()}
+        if path.endswith('/web_delete_dictionary'):
+            dictionaries = self.data[owner].get('dictionaries', {})
+            if dictionaries.get(body['p_dialect'], {'version': 0})['version'] != body['p_version']:
+                return {'conflict': True}
+            dictionaries.pop(body['p_dialect'], None)
+            return {'conflict': False}
         if 'generativelanguage.googleapis.com' in url:
             self.provider_calls += 1
             self.calls.append((path, body, headers))
@@ -98,6 +104,24 @@ class HostedLanguageAudioTests(unittest.TestCase):
             self.assertEqual((row['original'], row['english']), ('water', 'neeru'))
             code, _, result = self.send(base, '/api/dictionary/bulk-import', {'dialect': 'kannada', 'text': 'Kannada: ನನಗೆ ನೀರು ಬೇಕು\nEnglish: I want water.\nWord Mapping: ನೀರು -> water'})
             self.assertEqual((code, result['word_meanings']), (200, 1))
+            self.assertEqual(self.provider_calls, 0)
+
+    def test_deleted_dictionary_is_not_stored_in_reloaded_catalog(self):
+        with self.server() as base:
+            self.assertFalse(any(row['stored'] for row in self.send(base, '/api/dictionaries/details')[2]))
+            for name in ('kanglish', 'synthetic-custom'):
+                pair = {'name': name, 'source_language': 'kn-Latn', 'target_language': 'en'}
+                self.assertEqual(self.send(base, '/api/dictionaries/create', pair)[0], 200)
+                self.assertEqual(self.send(base, '/api/dictionaries/create', pair, user='user-b')[0], 200)
+                self.assertTrue(next(row for row in self.send(base, '/api/dictionaries/details')[2] if row['name'] == name)['stored'])
+                info = self.send(base, '/api/dictionary/info?dialect=' + name)[2]
+                self.assertEqual(self.send(base, '/api/dictionaries/delete', {'dialect': name, 'confirm_name': name, 'version': info['version']})[0], 200)
+                catalog = {row['name']: row for row in self.send(base, '/api/dictionaries/details')[2]}
+                if name == 'kanglish':
+                    self.assertFalse(catalog[name]['stored'])
+                else:
+                    self.assertNotIn(name, catalog)
+                self.assertTrue(next(row for row in self.send(base, '/api/dictionaries/details', user='user-b')[2] if row['name'] == name)['stored'])
             self.assertEqual(self.provider_calls, 0)
 
     def test_audio_auth_origin_csrf_and_quotas_block_provider(self):

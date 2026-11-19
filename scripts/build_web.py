@@ -113,6 +113,10 @@ def build():
 ''' + marker, 1)
     js = js.replace('sourceLabel.textContent = "Kanglish word or phrase"; meaningLabel.textContent = "English meaning";', 'sourceLabel.textContent = hostedName(hostedPair().source_language) + " word or phrase"; meaningLabel.textContent = hostedName(hostedPair().target_language) + " meaning";')
     js = js.replace('const srcLabel = {kanglish: "Kanglish → English", tuluglish: "Tuluglish → English"}[activeDialect] || `${activeDialect} → English`;', 'const srcLabel = hostedPair().label;')
+    js = js.replace('await loadDictionary(); notice("Meaning saved.");', 'await loadDictionary(); await loadDialects(); notice("Meaning saved.");')
+    js = js.replace('current.saved_english = saved.english;', 'current.saved_english = saved.english; await loadDialects();')
+    js = js.replace('const result = await api("/api/glossary/save", {id, terms: filled});', 'const result = await api("/api/glossary/save", {id, terms: filled}); await loadDialects();')
+    js = js.replace('await loadDictionary();\n    } else {', 'await loadDictionary(); await loadDialects();\n    } else {')
     hook = '$("message").addEventListener("input", invalidateInput);'
     if hook not in js:
         raise RuntimeError('Hosted feature insertion point is missing.')

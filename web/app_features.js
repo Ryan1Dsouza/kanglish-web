@@ -2,6 +2,7 @@
 const hostedLanguages = {'en':['english','English'], 'kn-Latn':['kanglish','Kanglish'], 'tcy-Latn':['tuluglish','Tuluglish'], 'kn-Knda':['kannada','Kannada'], 'tcy-Knda':['tulu','Tulu']};
 const hostedDefaults = Object.entries(hostedLanguages).flatMap(([source, [slug, label]]) => Object.entries(hostedLanguages).filter(([target]) => target !== source).map(([target,[other,targetLabel]]) => ({name:target === 'en' ? slug : `${slug}-${other}`,label:`${label} → ${targetLabel}`,source_language:source,target_language:target,count:0})));
 let hostedCatalog = [...hostedDefaults], hostedRecording = false, hostedRecorder = null, hostedStream = null, hostedTimer = null, hostedAudio = null, hostedAudioUrl = null;
+let hostedDictionaryRequest=0;
 const hostedName = code => hostedLanguages[code]?.[1] || code;
 const hostedPair = () => hostedCatalog.find(d => d.name === activeDialect) || hostedDefaults.find(d => d.name === 'kanglish');
 function hostedFill(id, selected) {
@@ -34,7 +35,7 @@ setControls=function() {
   $('audio-file').disabled=locked; $('discard-audio').disabled=busy;
   $('translate-audio').disabled=locked || !hostedAudio || !status.audio_configured;
   $('read-aloud').disabled=!current?.translation || busy || !window.speechSynthesis;
-  document.querySelectorAll('.dialect-pill,.dialect-add').forEach(button => {button.disabled=locked;});
+  document.querySelectorAll('.dialect-pill,.dialect-add,.dialect-delete').forEach(button => {button.disabled=locked;});
 };
 function hostedStopPlayback() {window.speechSynthesis?.cancel(); $('playback-status').textContent='';}
 const oldHostedInvalidate=invalidateInput;
@@ -60,6 +61,14 @@ function hostedChoose(source,target) {
   const pair=hostedDefaults.find(d => d.source_language === source && d.target_language === target);
   if (pair) return hostedSelect(pair.name);
 }
+loadDictionary=async function() {
+  const dialect=activeDialect, request=++hostedDictionaryRequest;
+  try {
+    const rows=await api(`/api/dictionary?dialect=${encodeURIComponent(dialect)}`);
+    if (request !== hostedDictionaryRequest || dialect !== activeDialect) return;
+    dictionary=rows;renderDictionary();
+  } catch(error) {if (request === hostedDictionaryRequest) notice(error.message,true);}
+};
 loadDialects=async function() {
   try {
     const entries=await api('/api/dictionaries/details');
@@ -70,12 +79,40 @@ loadDialects=async function() {
 };
 renderDialectSwitcher=function(entries) {
   const container=$('dialect-switcher'); container.replaceChildren();
-  entries.filter(d => d.count || d.name === activeDialect || d.source_language === 'en' || d.target_language === 'en' || !hostedDefaults.some(default_ => default_.name === d.name)).forEach(d => {
-    const button=document.createElement('button'); button.className='dialect-pill' + (d.name === activeDialect ? ' active' : ''); button.textContent=d.label + (d.count ? ` (${d.count})` : ''); button.disabled=busy || hostedRecording;
-    button.addEventListener('click',()=>hostedSelect(d.name)); container.append(button);
+  const saved=entries.filter(d => d.stored);
+  saved.forEach(d => {
+    const row=document.createElement('div'); row.className='dialect-row';
+    const button=document.createElement('button'); button.className='dialect-pill' + (d.name === activeDialect ? ' active' : ''); button.textContent=d.label + (d.count ? ` (${d.count})` : ''); button.disabled=busy || batchRunning || hostedRecording;
+    button.addEventListener('click',()=>hostedSelect(d.name));
+    const remove=document.createElement('button'); remove.className='dialect-delete'; remove.textContent='Delete'; remove.type='button'; remove.setAttribute('aria-label',`Delete dictionary ${d.label}`); remove.title=`Delete ${d.label}`; remove.disabled=busy || batchRunning || hostedRecording;
+    remove.addEventListener('click',()=>deleteDictionary(d.name)); row.append(button,remove);container.append(row);
   });
+  if (!saved.length) {const empty=document.createElement('p');empty.className='subtle dictionary-empty';empty.textContent='No saved dictionaries.';container.append(empty);}
   const add=document.createElement('button'); add.className='dialect-add'; add.textContent='+ New'; add.disabled=busy || hostedRecording;
   add.addEventListener('click',()=>{view('dictionary'); $('create-dictionary-panel').open=true; $('new-dictionary-source').value=hostedPair().source_language; $('new-dictionary-target').value=hostedPair().target_language; $('new-dictionary-name').focus();}); container.append(add);
+};
+deleteDictionary=async function(name) {
+  if (busy || batchRunning || hostedRecording || !token) return;
+  const dialect=typeof name === 'string' ? name : activeDialect;
+  const label=hostedCatalog.find(d => d.name === dialect)?.label || dialect;
+  busy=true;setControls();
+  try {
+    const info=await api(`/api/dictionary/info?dialect=${encodeURIComponent(dialect)}`);
+    if (!window.confirm(`Delete the "${label}" dictionary and all ${info.entries} saved entries, including linked word meanings? It will disappear from the sidebar.\n\nThis cannot be undone. Export the dictionary first if you want a backup.`)) return;
+    await api('/api/dictionaries/delete',{dialect,confirm_name:dialect,version:info.version});
+    ++hostedDictionaryRequest;
+    hostedCatalog=hostedCatalog.filter(d => d.name !== dialect);
+    if (hostedDefaults.some(d => d.name === dialect)) hostedCatalog.push({...hostedDefaults.find(d => d.name === dialect),stored:false});
+    if (activeDialect === dialect) {
+      if (!hostedDefaults.some(d => d.name === dialect)) activeDialect='kanglish';
+      dictionary=[];hostedDiscard();clearDictionaryBulkPreview();invalidateInput();
+      try {window.localStorage?.setItem('kanglish-hosted-dictionary',activeDialect);}catch{}
+    } else if (current?.dialect === dialect) invalidateInput();
+    hostedLabels();renderDialectSwitcher(hostedCatalog);
+    await loadDialects();
+    if (view_name === 'dictionary') await loadDictionary();
+    notice(`Deleted "${label}" and removed it from the sidebar.`);
+  } catch(error) {notice(error.message,true);} finally {busy=false;setControls();}
 };
 translate=async function() {
   if (busy || hostedRecording) return;

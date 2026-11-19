@@ -33,5 +33,9 @@ select { font:inherit; color:var(--ink); background:#fcfdf9; border:1px solid va
 #audio-preview { width:100%; max-width:340px; }
 .dialect-switcher-area { overflow:auto; max-height:42vh; }
 .dialect-pill { line-height:1.4; text-align:left; }
+.dialect-row { display:flex; align-items:center; gap:5px; width:100%; min-width:0; }
+.dialect-row .dialect-pill { flex:1; min-width:0; overflow-wrap:anywhere; }
+.dialect-delete { padding:7px 6px; border:0; background:transparent; color:var(--red); font-size:10px; flex-shrink:0; }
+.dictionary-empty { margin:0 0 5px; }
 select:focus-visible, .audio-file-label:focus-within { outline:3px solid #85bba2; outline-offset:3px; }
 @media(max-width:500px) { .language-controls label { min-width:125px; flex:1; } #selected-direction { flex-basis:100%; } }
