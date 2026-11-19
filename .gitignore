@@ -1,0 +1,44 @@
+# Credentials and machine-specific configuration
+.env
+.env.*
+*.env
+!.env.example
+*.key
+*.pem
+*.p12
+*.pfx
+*.jks
+*.keystore
+*credentials*.json
+*service-account*.json
+configs/*.local.json
+.vercel/
+# Personal translations, logs, models and downloads
+.tools/
+results/
+*corrections*.json
+*.sqlite*
+*.db
+*.log
+*.csv
+*.jsonl
+*.gguf
+*.safetensors
+*.bin
+*.zip
+*.exe
+*.dll
+tmp/*
+!tmp/.gitkeep
+# Build/cache artifacts
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+node_modules/
+dist/
+build/
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

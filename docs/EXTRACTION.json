@@ -1,0 +1,128 @@
+{
+  "source_repository": "https://github.com/Ryan1Dsouza/Kanglish",
+  "source_base_commit": "6845e84b7d13799c9a77aaeda9d2a483c488f849",
+  "source_includes_working_tree_changes": true,
+  "files": [
+    {
+      "path": "mobile/desktop/index.html",
+      "sha256": "feb2d1c5c9c4cfe0b3f9c145da2b6e5304648d49f46feb76cdf926fd9c475cfb"
+    },
+    {
+      "path": "mobile/desktop/app.js",
+      "sha256": "0cebf70f88fa70d10140e723b7b68a303c705bca96849ac106fdb3a649b75e50"
+    },
+    {
+      "path": "mobile/desktop/style.css",
+      "sha256": "c6b8c689a7a016c828a8f701039efcd06ff0ea628c41998a4f448ae2dcf4084f"
+    },
+    {
+      "path": "mobile/desktop/glossary.css",
+      "sha256": "d7e1a188477350fe4181ba70a5edefd2e9ae5adb6a46220dedd48c9278899721"
+    },
+    {
+      "path": "scripts/run_desktop.py",
+      "sha256": "8e5c77181219a273dfca8b659d6ae92893644a8cb615df9c3954c29c386ebefe"
+    },
+    {
+      "path": "scripts/setup_desktop_runtime.py",
+      "sha256": "a32dfd7a96693d8bba3d53f293c8d3e0bd9c63d6108a719f294cd65d78fd0f4e"
+    },
+    {
+      "path": "scripts/training/prompt.py",
+      "sha256": "395d4d5c11f68b6a46db40170ebf7abd62a377e122d5566c5ff9fee8359ad9d2"
+    },
+    {
+      "path": "scripts/training/__init__.py",
+      "sha256": "383ce3655880e257a9cd44bac84e3a3c09c2875a73153c521781c542418372b4"
+    },
+    {
+      "path": "scripts/student_pipeline/contract.py",
+      "sha256": "9c6ce757c94e65581ddab3ec1e426a2ab3de7fad7da8f5c86cc23b4110e77383"
+    },
+    {
+      "path": "scripts/student_pipeline/__init__.py",
+      "sha256": "9e261511977cc4e415fefd7009b2b6135fb76507f793688ecd5a793bad4e69ba"
+    },
+    {
+      "path": "scripts/tulu_master.py",
+      "sha256": "f78fcb58134486ccd85eb43ae12fbe0c6a55f5c36cd784d43945f1d586474fbf"
+    },
+    {
+      "path": "scripts/trusted_pipeline/quality.py",
+      "sha256": "f048d67dd249a6462ebacadb45f0af33c4f3dddb716c59aa067ba2af322d6cf9"
+    },
+    {
+      "path": "scripts/trusted_pipeline/__init__.py",
+      "sha256": "6331e41adb178e93e3514c0561a781472d4c33f6e5a3c8cfdacda8753f00dd8a"
+    },
+    {
+      "path": "configs/desktop.example.json",
+      "sha256": "21f0174ca34d50a84496ae36f085bfbeb10edf114f1070bfc79963964031b425"
+    },
+    {
+      "path": "mobile/android/app/src/main/assets/glossary.json",
+      "sha256": "e4ab483aaaaf34537bf167de48404efc49981598dbf024239eccf8174888f883"
+    },
+    {
+      "path": "mobile/android/app/src/main/assets/coastal_glossary.json",
+      "sha256": "2b73adcbfe1f4344a35d4689a9a7d538abe6e213e80280bdac8e1126e34bf6cf"
+    },
+    {
+      "path": "mobile/android/app/src/main/assets/tulu_master_glossary.json",
+      "sha256": "d5fb11a15ec0e2d9b2f24bd132306bc07d2d3d6f59618ee372a2f054d53eeba1"
+    },
+    {
+      "path": "mobile/android/app/src/main/assets/alar_conversational_glossary.json",
+      "sha256": "e4f0046e2e490a2d5cbf5cf41b48e7db86085d88b5fdcdbc61b7cbbd4a07be90"
+    },
+    {
+      "path": "mobile/android/app/src/main/assets/alar_conversational_glossary.LICENSE.md",
+      "sha256": "dfabe1001780256051c441172ae0a8a7bc602928172f2ee4f9081155e79f9f8c"
+    },
+    {
+      "path": "mobile/android/app/src/main/java/org/kanglish/app/inference/TranslationPrompt.kt",
+      "sha256": "822adaf6b4ee236d5ef8f2a0a0b0dc147cecd10067c89a5bd73ef078ecfeb769"
+    },
+    {
+      "path": "mobile/android/app/src/main/java/org/kanglish/app/data/SourceLanguage.kt",
+      "sha256": "a3fd1da5a88a91bb710d2020046a334fd8bdae3973110c4d9edc157c398ef5dc"
+    },
+    {
+      "path": "data/corpus/tulu_master_glossary.json",
+      "sha256": "d5fb11a15ec0e2d9b2f24bd132306bc07d2d3d6f59618ee372a2f054d53eeba1"
+    },
+    {
+      "path": "tests/test_desktop_app.py",
+      "sha256": "b4f78b33a788738681fdfb656165fee975588b4a2bda726dbbed892981c566e7"
+    },
+    {
+      "path": "tests/test_desktop_bulk_import.py",
+      "sha256": "237818163aff58939e5458a1a5032d8465461a38bf63abb71de5893e182d6634"
+    },
+    {
+      "path": "tests/test_desktop_compound_mappings.py",
+      "sha256": "f566864cc97781e7d40c92704e934a477114a5763f2eaf58f7055ecb41589a5c"
+    },
+    {
+      "path": "tests/test_desktop_technical_mappings.py",
+      "sha256": "7eb3b14959c0fd5ef893cda251f34897e764f444164d8bf9c5a9750d0d890ff0"
+    },
+    {
+      "path": "tests/desktop_web_state.test.cjs",
+      "sha256": "f00c0984d3197dea4129edcf69c6f646fa20114ece7d6dccfbd6735f6c36fee8"
+    },
+    {
+      "path": "docs/DESKTOP_APP.md",
+      "sha256": "61965a7561f29a92b1a208e5058749a83e0b7b5c9067b5f4ea4f0557b6fa4983"
+    }
+  ],
+  "excluded": [
+    "Git history",
+    "environment files and credentials",
+    "local configs",
+    "personal corrections and SQLite state",
+    "session logs and captures",
+    "model weights and downloaded runtimes",
+    "training/evaluation datasets and pipelines"
+  ]
+}

@@ -1,0 +1,2464 @@
+[
+  {
+    "kanglish": "naale",
+    "english": "tomorrow"
+  },
+  {
+    "kanglish": "ivattu",
+    "english": "today"
+  },
+  {
+    "kanglish": "ninne",
+    "english": "yesterday"
+  },
+  {
+    "kanglish": "modlu",
+    "english": "first/earlier"
+  },
+  {
+    "kanglish": "munde",
+    "english": "later/ahead"
+  },
+  {
+    "kanglish": "yenu",
+    "english": "what"
+  },
+  {
+    "kanglish": "yaaru",
+    "english": "who"
+  },
+  {
+    "kanglish": "yelli",
+    "english": "where"
+  },
+  {
+    "kanglish": "yaake",
+    "english": "why"
+  },
+  {
+    "kanglish": "yaavaga",
+    "english": "when"
+  },
+  {
+    "kanglish": "heege",
+    "english": "like this"
+  },
+  {
+    "kanglish": "yeshtu",
+    "english": "how much"
+  },
+  {
+    "kanglish": "guru",
+    "english": "bro/dude (term of address)"
+  },
+  {
+    "kanglish": "maga",
+    "english": "dude/man (term of address)"
+  },
+  {
+    "kanglish": "sakkath",
+    "english": "awesome/great (slang)"
+  },
+  {
+    "kanglish": "chandagide",
+    "english": "it's nice"
+  },
+  {
+    "kanglish": "aagide",
+    "english": "is/has happened (e.g. \"sakkath aagide\" = it's awesome)"
+  },
+  {
+    "kanglish": "gottilla",
+    "english": "I don't know"
+  },
+  {
+    "kanglish": "gotthu",
+    "english": "I know"
+  },
+  {
+    "kanglish": "beda",
+    "english": "don't want/no need"
+  },
+  {
+    "kanglish": "beku",
+    "english": "want/need"
+  },
+  {
+    "kanglish": "bekagilla",
+    "english": "don't need"
+  },
+  {
+    "kanglish": "bartheeni",
+    "english": "I will come"
+  },
+  {
+    "kanglish": "bartiya",
+    "english": "will you come"
+  },
+  {
+    "kanglish": "hogtheeni",
+    "english": "I will go"
+  },
+  {
+    "kanglish": "hogtiya",
+    "english": "will you go"
+  },
+  {
+    "kanglish": "madtheeni",
+    "english": "I will do"
+  },
+  {
+    "kanglish": "madtidya",
+    "english": "are you doing"
+  },
+  {
+    "kanglish": "aaitu",
+    "english": "done/okay"
+  },
+  {
+    "kanglish": "aagilla",
+    "english": "didn't happen/not possible"
+  },
+  {
+    "kanglish": "oota",
+    "english": "food/meal"
+  },
+  {
+    "kanglish": "haalu",
+    "english": "milk"
+  },
+  {
+    "kanglish": "kaapi",
+    "english": "coffee"
+  },
+  {
+    "kanglish": "ninna",
+    "english": "your"
+  },
+  {
+    "kanglish": "nanna",
+    "english": "my"
+  },
+  {
+    "kanglish": "navu",
+    "english": "we"
+  },
+  {
+    "kanglish": "avru",
+    "english": "they/he/she (respectful)"
+  },
+  {
+    "kanglish": "ishtu",
+    "english": "this much"
+  },
+  {
+    "kanglish": "adru",
+    "english": "but/even so"
+  },
+  {
+    "kanglish": "kelsa",
+    "english": "work/job"
+  },
+  {
+    "kanglish": "ge",
+    "english": "to"
+  },
+  {
+    "kanglish": "illa",
+    "english": "no/not there"
+  },
+  {
+    "kanglish": "houdu",
+    "english": "yes"
+  },
+  {
+    "kanglish": "tumba",
+    "english": "very"
+  },
+  {
+    "kanglish": "swalpa",
+    "english": "a little"
+  },
+  {
+    "kanglish": "barthini",
+    "english": "I will come"
+  },
+  {
+    "kanglish": "barthira",
+    "english": "are you coming"
+  },
+  {
+    "kanglish": "illi",
+    "english": "here"
+  },
+  {
+    "kanglish": "baa",
+    "english": "come (informal command)"
+  },
+  {
+    "kanglish": "ide",
+    "english": "there is or is present (context-dependent)"
+  },
+  {
+    "kanglish": "scene",
+    "english": "plan or situation (colloquial)"
+  },
+  {
+    "kanglish": "enu",
+    "english": "what"
+  },
+  {
+    "kanglish": "chennagide",
+    "english": "good or nice"
+  },
+  {
+    "kanglish": "nodide",
+    "english": "watched or saw"
+  },
+  {
+    "kanglish": "aaytha",
+    "english": "done or happened (context-dependent)"
+  },
+  {
+    "kanglish": "maadu",
+    "english": "do (command)"
+  },
+  {
+    "kanglish": "ivattu class ide",
+    "english": "There's class today"
+  },
+  {
+    "kanglish": "ninne movie nodide",
+    "english": "I watched a movie yesterday"
+  },
+  {
+    "kanglish": "oota aaytha",
+    "english": "Have you eaten?"
+  },
+  {
+    "kanglish": "guru scene enu",
+    "english": "Bro, what's the plan?"
+  },
+  {
+    "kanglish": "swalpa wait maadu",
+    "english": "Wait a little"
+  },
+  {
+    "kanglish": "dada",
+    "english": "what"
+  },
+  {
+    "kanglish": "daad",
+    "english": "what"
+  },
+  {
+    "kanglish": "dadha",
+    "english": "what"
+  },
+  {
+    "kanglish": "daada",
+    "english": "what"
+  },
+  {
+    "kanglish": "avondh undu",
+    "english": "is happening / going on"
+  },
+  {
+    "kanglish": "avondh und",
+    "english": "is happening / going on"
+  },
+  {
+    "kanglish": "avond undu",
+    "english": "is happening / going on"
+  },
+  {
+    "kanglish": "maltond ullar",
+    "english": "are doing / is doing"
+  },
+  {
+    "kanglish": "maltond ulla",
+    "english": "are doing / is doing"
+  },
+  {
+    "kanglish": "manthond ulle",
+    "english": "are doing / is doing"
+  },
+  {
+    "kanglish": "ullara",
+    "english": "are you there / are they there"
+  },
+  {
+    "kanglish": "ularaa",
+    "english": "are you there / are they there"
+  },
+  {
+    "kanglish": "ulara",
+    "english": "are you there / are they there"
+  },
+  {
+    "kanglish": "ullada",
+    "english": "are you there / are they there"
+  },
+  {
+    "kanglish": "uller",
+    "english": "are you there / are they there"
+  },
+  {
+    "kanglish": "yerla",
+    "english": "anyone / someone"
+  },
+  {
+    "kanglish": "erla",
+    "english": "anyone / someone"
+  },
+  {
+    "kanglish": "yerandala",
+    "english": "anyone / someone"
+  },
+  {
+    "kanglish": "erandala",
+    "english": "anyone / someone"
+  },
+  {
+    "kanglish": "yeregla",
+    "english": "to anyone / for anyone"
+  },
+  {
+    "kanglish": "eregla",
+    "english": "to anyone / for anyone"
+  },
+  {
+    "kanglish": "yeregandhala",
+    "english": "to anyone / for anyone"
+  },
+  {
+    "kanglish": "yer pura",
+    "english": "who all"
+  },
+  {
+    "kanglish": "yer matha",
+    "english": "who all"
+  },
+  {
+    "kanglish": "maatherla",
+    "english": "everyone / all"
+  },
+  {
+    "kanglish": "matherla",
+    "english": "everyone / all"
+  },
+  {
+    "kanglish": "mata",
+    "english": "everyone / all"
+  },
+  {
+    "kanglish": "matha",
+    "english": "everyone / all"
+  },
+  {
+    "kanglish": "pura",
+    "english": "everyone / all"
+  },
+  {
+    "kanglish": "ijji",
+    "english": "no / not there / don't have"
+  },
+  {
+    "kanglish": "ejji",
+    "english": "no / not there / don't have"
+  },
+  {
+    "kanglish": "iji",
+    "english": "no / not there / don't have"
+  },
+  {
+    "kanglish": "ijja",
+    "english": "no / not there / don't have"
+  },
+  {
+    "kanglish": "ejja",
+    "english": "no / not there / don't have"
+  },
+  {
+    "kanglish": "andh",
+    "english": "yes / right / is it so"
+  },
+  {
+    "kanglish": "andha",
+    "english": "yes / right / is it so"
+  },
+  {
+    "kanglish": "anda",
+    "english": "yes / right / is it so"
+  },
+  {
+    "kanglish": "andhiya",
+    "english": "yes / right / is it so"
+  },
+  {
+    "kanglish": "atth",
+    "english": "not / right? / isn't it?"
+  },
+  {
+    "kanglish": "ath",
+    "english": "not / right? / isn't it?"
+  },
+  {
+    "kanglish": "atha",
+    "english": "not / right? / isn't it?"
+  },
+  {
+    "kanglish": "ata",
+    "english": "not / right? / isn't it?"
+  },
+  {
+    "kanglish": "padle",
+    "english": "put / post / mark (e.g., attendance)"
+  },
+  {
+    "kanglish": "paadle",
+    "english": "put / post / mark (e.g., attendance)"
+  },
+  {
+    "kanglish": "pad",
+    "english": "put / post / mark (e.g., attendance)"
+  },
+  {
+    "kanglish": "paad",
+    "english": "put / post / mark (e.g., attendance)"
+  },
+  {
+    "kanglish": "padh",
+    "english": "put / post / mark (e.g., attendance)"
+  },
+  {
+    "kanglish": "malpu",
+    "english": "do / make"
+  },
+  {
+    "kanglish": "manpu",
+    "english": "do / make"
+  },
+  {
+    "kanglish": "malpule",
+    "english": "please do / make"
+  },
+  {
+    "kanglish": "manpule",
+    "english": "please do / make"
+  },
+  {
+    "kanglish": "malpodu",
+    "english": "must do / make"
+  },
+  {
+    "kanglish": "manpodu",
+    "english": "must do / make"
+  },
+  {
+    "kanglish": "malpodchi",
+    "english": "don't do"
+  },
+  {
+    "kanglish": "padoodchi",
+    "english": "don't put"
+  },
+  {
+    "kanglish": "kenordchi",
+    "english": "don't ask"
+  },
+  {
+    "kanglish": "depodchi",
+    "english": "don't remove"
+  },
+  {
+    "kanglish": "budochi",
+    "english": "don't do / don't want"
+  },
+  {
+    "kanglish": "borchi",
+    "english": "don't want"
+  },
+  {
+    "kanglish": "bodchi",
+    "english": "don't want"
+  },
+  {
+    "kanglish": "elle",
+    "english": "tomorrow"
+  },
+  {
+    "kanglish": "yelle",
+    "english": "tomorrow"
+  },
+  {
+    "kanglish": "ellanji",
+    "english": "day after tomorrow"
+  },
+  {
+    "kanglish": "yellonji",
+    "english": "day after tomorrow"
+  },
+  {
+    "kanglish": "ini",
+    "english": "today / that day"
+  },
+  {
+    "kanglish": "ani",
+    "english": "today / that day"
+  },
+  {
+    "kanglish": "kode",
+    "english": "yesterday"
+  },
+  {
+    "kanglish": "morani",
+    "english": "day before yesterday / recently"
+  },
+  {
+    "kanglish": "murani",
+    "english": "day before yesterday / recently"
+  },
+  {
+    "kanglish": "kande",
+    "english": "morning"
+  },
+  {
+    "kanglish": "kaande",
+    "english": "morning"
+  },
+  {
+    "kanglish": "kandhe",
+    "english": "morning"
+  },
+  {
+    "kanglish": "madyana",
+    "english": "afternoon"
+  },
+  {
+    "kanglish": "bayyag",
+    "english": "in the evening"
+  },
+  {
+    "kanglish": "bayya",
+    "english": "in the evening"
+  },
+  {
+    "kanglish": "ellade",
+    "english": "home / to home"
+  },
+  {
+    "kanglish": "ellad",
+    "english": "home / to home"
+  },
+  {
+    "kanglish": "ellag",
+    "english": "home / to home"
+  },
+  {
+    "kanglish": "pidhai",
+    "english": "outside"
+  },
+  {
+    "kanglish": "pedai",
+    "english": "outside"
+  },
+  {
+    "kanglish": "pidayi",
+    "english": "outside"
+  },
+  {
+    "kanglish": "mulpa",
+    "english": "here"
+  },
+  {
+    "kanglish": "mul",
+    "english": "here"
+  },
+  {
+    "kanglish": "mulp",
+    "english": "here"
+  },
+  {
+    "kanglish": "alpa",
+    "english": "there"
+  },
+  {
+    "kanglish": "avl",
+    "english": "there"
+  },
+  {
+    "kanglish": "olu",
+    "english": "where / where are you / where is he"
+  },
+  {
+    "kanglish": "vol",
+    "english": "where / where are you / where is he"
+  },
+  {
+    "kanglish": "ola",
+    "english": "where / where are you / where is he"
+  },
+  {
+    "kanglish": "olya",
+    "english": "where / where are you / where is he"
+  },
+  {
+    "kanglish": "olle",
+    "english": "where / where are you / where is he"
+  },
+  {
+    "kanglish": "odhe",
+    "english": "where / where are you / where is he"
+  },
+  {
+    "kanglish": "vode",
+    "english": "where / where are you / where is he"
+  },
+  {
+    "kanglish": "ovvu",
+    "english": "which / which one"
+  },
+  {
+    "kanglish": "vov",
+    "english": "which / which one"
+  },
+  {
+    "kanglish": "ovu",
+    "english": "which / which one"
+  },
+  {
+    "kanglish": "oin",
+    "english": "which / which one"
+  },
+  {
+    "kanglish": "yeth",
+    "english": "how much / how many"
+  },
+  {
+    "kanglish": "eth",
+    "english": "how much / how many"
+  },
+  {
+    "kanglish": "yepa",
+    "english": "when / always"
+  },
+  {
+    "kanglish": "epa",
+    "english": "when / always"
+  },
+  {
+    "kanglish": "yepala",
+    "english": "when / always"
+  },
+  {
+    "kanglish": "yencha",
+    "english": "how / what kind of"
+  },
+  {
+    "kanglish": "encha",
+    "english": "how / what kind of"
+  },
+  {
+    "kanglish": "yenchina",
+    "english": "how / what kind of"
+  },
+  {
+    "kanglish": "enchina",
+    "english": "how / what kind of"
+  },
+  {
+    "kanglish": "daayeg",
+    "english": "why / what"
+  },
+  {
+    "kanglish": "dayeg",
+    "english": "why / what"
+  },
+  {
+    "kanglish": "daaye",
+    "english": "why / what"
+  },
+  {
+    "kanglish": "daye",
+    "english": "why / what"
+  },
+  {
+    "kanglish": "daane",
+    "english": "why / what"
+  },
+  {
+    "kanglish": "dane",
+    "english": "why / what"
+  },
+  {
+    "kanglish": "kalpu",
+    "english": "study / learn"
+  },
+  {
+    "kanglish": "kalpule",
+    "english": "study / learn"
+  },
+  {
+    "kanglish": "kalpuvara",
+    "english": "study / learn"
+  },
+  {
+    "kanglish": "kalpuvana",
+    "english": "study / learn"
+  },
+  {
+    "kanglish": "kalth",
+    "english": "study / learn"
+  },
+  {
+    "kanglish": "kaltar",
+    "english": "study / learn"
+  },
+  {
+    "kanglish": "vodere",
+    "english": "to read / to study"
+  },
+  {
+    "kanglish": "odhare",
+    "english": "to read / to study"
+  },
+  {
+    "kanglish": "voduna",
+    "english": "to read / to study"
+  },
+  {
+    "kanglish": "oduna",
+    "english": "to read / to study"
+  },
+  {
+    "kanglish": "odhuve",
+    "english": "to read / to study"
+  },
+  {
+    "kanglish": "bareyere",
+    "english": "to write"
+  },
+  {
+    "kanglish": "bareyare",
+    "english": "to write"
+  },
+  {
+    "kanglish": "barepunu",
+    "english": "writing"
+  },
+  {
+    "kanglish": "barethuji",
+    "english": "haven't written"
+  },
+  {
+    "kanglish": "barethiji",
+    "english": "haven't written"
+  },
+  {
+    "kanglish": "gobbuga",
+    "english": "let's play"
+  },
+  {
+    "kanglish": "gobuga",
+    "english": "let's play"
+  },
+  {
+    "kanglish": "gobbunu",
+    "english": "to play"
+  },
+  {
+    "kanglish": "gobiyer",
+    "english": "played"
+  },
+  {
+    "kanglish": "vanas",
+    "english": "meal / lunch / dinner"
+  },
+  {
+    "kanglish": "onas",
+    "english": "meal / lunch / dinner"
+  },
+  {
+    "kanglish": "jeppu",
+    "english": "sleep"
+  },
+  {
+    "kanglish": "jeppule",
+    "english": "go to sleep"
+  },
+  {
+    "kanglish": "jep",
+    "english": "sleep"
+  },
+  {
+    "kanglish": "jetthe",
+    "english": "slept"
+  },
+  {
+    "kanglish": "jethonde",
+    "english": "slept"
+  },
+  {
+    "kanglish": "jaide",
+    "english": "lay down / slept"
+  },
+  {
+    "kanglish": "kullu",
+    "english": "sit / stay quiet / shut up"
+  },
+  {
+    "kanglish": "kul",
+    "english": "sit / stay quiet / shut up"
+  },
+  {
+    "kanglish": "kulle",
+    "english": "sit / stay quiet / shut up"
+  },
+  {
+    "kanglish": "manipande",
+    "english": "silently / without speaking"
+  },
+  {
+    "kanglish": "mandipande",
+    "english": "silently / without speaking"
+  },
+  {
+    "kanglish": "manipandhe",
+    "english": "silently / without speaking"
+  },
+  {
+    "kanglish": "manipad",
+    "english": "silently / without speaking"
+  },
+  {
+    "kanglish": "pathera",
+    "english": "words / talk"
+  },
+  {
+    "kanglish": "patherodchi",
+    "english": "don't talk"
+  },
+  {
+    "kanglish": "pateruji",
+    "english": "don't talk"
+  },
+  {
+    "kanglish": "patherega",
+    "english": "let's talk"
+  },
+  {
+    "kanglish": "mandebeccha",
+    "english": "headache / worry / stress"
+  },
+  {
+    "kanglish": "mande",
+    "english": "head / worry"
+  },
+  {
+    "kanglish": "beccha",
+    "english": "heat"
+  },
+  {
+    "kanglish": "mallejji",
+    "english": "no problem / it's okay / doesn't matter"
+  },
+  {
+    "kanglish": "malleiji",
+    "english": "no problem / it's okay / doesn't matter"
+  },
+  {
+    "kanglish": "malliji",
+    "english": "no problem / it's okay / doesn't matter"
+  },
+  {
+    "kanglish": "malejji",
+    "english": "no problem / it's okay / doesn't matter"
+  },
+  {
+    "kanglish": "malla",
+    "english": "big / great"
+  },
+  {
+    "kanglish": "malle",
+    "english": "big / great"
+  },
+  {
+    "kanglish": "yelya",
+    "english": "small"
+  },
+  {
+    "kanglish": "elya",
+    "english": "small"
+  },
+  {
+    "kanglish": "edde",
+    "english": "good / well"
+  },
+  {
+    "kanglish": "yedde",
+    "english": "good / well"
+  },
+  {
+    "kanglish": "yedhe",
+    "english": "good / well"
+  },
+  {
+    "kanglish": "ede",
+    "english": "good / well"
+  },
+  {
+    "kanglish": "chooru",
+    "english": "a little bit"
+  },
+  {
+    "kanglish": "chur",
+    "english": "a little bit"
+  },
+  {
+    "kanglish": "onchur",
+    "english": "a little bit"
+  },
+  {
+    "kanglish": "vonchur",
+    "english": "a little bit"
+  },
+  {
+    "kanglish": "unchur",
+    "english": "a little bit"
+  },
+  {
+    "kanglish": "sumar",
+    "english": "a lot / many / very"
+  },
+  {
+    "kanglish": "masth",
+    "english": "a lot / many / very"
+  },
+  {
+    "kanglish": "gothiji",
+    "english": "don't know"
+  },
+  {
+    "kanglish": "gothuji",
+    "english": "don't know"
+  },
+  {
+    "kanglish": "gutuji",
+    "english": "don't know"
+  },
+  {
+    "kanglish": "gothundu",
+    "english": "know"
+  },
+  {
+    "kanglish": "gotanda",
+    "english": "understood?"
+  },
+  {
+    "kanglish": "gotunda",
+    "english": "understood?"
+  },
+  {
+    "kanglish": "nempijji",
+    "english": "don't remember / forgot"
+  },
+  {
+    "kanglish": "nenpe ijji",
+    "english": "don't remember / forgot"
+  },
+  {
+    "kanglish": "mareth pondu",
+    "english": "don't remember / forgot"
+  },
+  {
+    "kanglish": "barsa",
+    "english": "rain"
+  },
+  {
+    "kanglish": "ushar iji",
+    "english": "not feeling well / sick"
+  },
+  {
+    "kanglish": "ushar",
+    "english": "well / healthy (negated in 'ushar iji')"
+  },
+  {
+    "kanglish": "banji bene",
+    "english": "stomach ache / pain"
+  },
+  {
+    "kanglish": "bene",
+    "english": "pain"
+  },
+  {
+    "kanglish": "thelike",
+    "english": "laughter"
+  },
+  {
+    "kanglish": "telter",
+    "english": "laughed"
+  },
+  {
+    "kanglish": "thelitther",
+    "english": "laughed"
+  },
+  {
+    "kanglish": "telpunu",
+    "english": "laughing"
+  },
+  {
+    "kanglish": "bulper",
+    "english": "will cry"
+  },
+  {
+    "kanglish": "bulpuve",
+    "english": "will cry"
+  },
+  {
+    "kanglish": "bulthon dullal",
+    "english": "crying"
+  },
+  {
+    "kanglish": "bulthini",
+    "english": "cried"
+  },
+  {
+    "kanglish": "kadapudle",
+    "english": "send / dispatch"
+  },
+  {
+    "kanglish": "kadapudu",
+    "english": "send / dispatch"
+  },
+  {
+    "kanglish": "kadapudve",
+    "english": "send / dispatch"
+  },
+  {
+    "kanglish": "kadapudne",
+    "english": "send / dispatch"
+  },
+  {
+    "kanglish": "konale",
+    "english": "bring / will bring"
+  },
+  {
+    "kanglish": "konala",
+    "english": "bring / will bring"
+  },
+  {
+    "kanglish": "kanpe",
+    "english": "bring / will bring"
+  },
+  {
+    "kanglish": "kanoda",
+    "english": "bring / will bring"
+  },
+  {
+    "kanglish": "kanpara",
+    "english": "bring / will bring"
+  },
+  {
+    "kanglish": "thoola",
+    "english": "look / see"
+  },
+  {
+    "kanglish": "tula",
+    "english": "look / see"
+  },
+  {
+    "kanglish": "thoole",
+    "english": "look / see"
+  },
+  {
+    "kanglish": "tupe",
+    "english": "look / see"
+  },
+  {
+    "kanglish": "thuppe",
+    "english": "look / see"
+  },
+  {
+    "kanglish": "tuvondh ulle",
+    "english": "watching"
+  },
+  {
+    "kanglish": "pudar",
+    "english": "name"
+  },
+  {
+    "kanglish": "pudhar",
+    "english": "name"
+  },
+  {
+    "kanglish": "ponnu",
+    "english": "girl / girls"
+  },
+  {
+    "kanglish": "ponnul",
+    "english": "girl / girls"
+  },
+  {
+    "kanglish": "ponul",
+    "english": "girl / girls"
+  },
+  {
+    "kanglish": "ponnuleg",
+    "english": "girl / girls"
+  },
+  {
+    "kanglish": "anul",
+    "english": "boys / kids"
+  },
+  {
+    "kanglish": "jokulu",
+    "english": "boys / kids"
+  },
+  {
+    "kanglish": "bodedi",
+    "english": "wife"
+  },
+  {
+    "kanglish": "budedi",
+    "english": "wife"
+  },
+  {
+    "kanglish": "amme",
+    "english": "father"
+  },
+  {
+    "kanglish": "ammer",
+    "english": "father"
+  },
+  {
+    "kanglish": "ammerna",
+    "english": "father's"
+  },
+  {
+    "kanglish": "ammereg",
+    "english": "to father"
+  },
+  {
+    "kanglish": "saavu",
+    "english": "death / damn it (slang exclamation)"
+  },
+  {
+    "kanglish": "saav",
+    "english": "death / damn it (slang exclamation)"
+  },
+  {
+    "kanglish": "sav",
+    "english": "death / damn it (slang exclamation)"
+  },
+  {
+    "kanglish": "saither",
+    "english": "died"
+  },
+  {
+    "kanglish": "saithe",
+    "english": "died"
+  },
+  {
+    "kanglish": "marre",
+    "english": "man / dude / bro"
+  },
+  {
+    "kanglish": "mare",
+    "english": "man / dude / bro"
+  },
+  {
+    "kanglish": "marya",
+    "english": "man / dude / bro"
+  },
+  {
+    "kanglish": "paje",
+    "english": "studying hard / mugging up"
+  },
+  {
+    "kanglish": "hard paje",
+    "english": "studying hard / mugging up"
+  },
+  {
+    "kanglish": "keppereg depe",
+    "english": "will slap your cheek"
+  },
+  {
+    "kanglish": "keppe depe",
+    "english": "will slap your cheek"
+  },
+  {
+    "kanglish": "keppe g depe",
+    "english": "will slap your cheek"
+  },
+  {
+    "kanglish": "kai korpa",
+    "english": "betray / ditch / fail a subject"
+  },
+  {
+    "kanglish": "kai koroduya",
+    "english": "betray / ditch / fail a subject"
+  },
+  {
+    "kanglish": "kai korpujja",
+    "english": "betray / ditch / fail a subject"
+  },
+  {
+    "kanglish": "bere dina illva",
+    "english": "is there no other day (except)"
+  },
+  {
+    "kanglish": "bittu",
+    "english": "except / leaving aside"
+  },
+  {
+    "kanglish": "send maddi",
+    "english": "please send / do it"
+  },
+  {
+    "kanglish": "send madu",
+    "english": "please send / do it"
+  },
+  {
+    "kanglish": "madudha",
+    "english": "do it"
+  },
+  {
+    "kanglish": "nange siglilaa",
+    "english": "I didn't find/get it"
+  },
+  {
+    "kanglish": "bandide",
+    "english": "came / has arrived"
+  },
+  {
+    "kanglish": "barlilla",
+    "english": "didn't come"
+  },
+  {
+    "kanglish": "yaar iddaare",
+    "english": "who is there"
+  },
+  {
+    "kanglish": "kale",
+    "english": "what"
+  },
+  {
+    "kanglish": "kale karya",
+    "english": "what to do"
+  },
+  {
+    "kanglish": "kale zavn",
+    "english": "what happened / what is happening"
+  },
+  {
+    "kanglish": "kale zale",
+    "english": "what happened"
+  },
+  {
+    "kanglish": "kanche",
+    "english": "which / where"
+  },
+  {
+    "kanglish": "kainche",
+    "english": "which / where"
+  },
+  {
+    "kanglish": "khai",
+    "english": "where"
+  },
+  {
+    "kanglish": "muje proxy gal",
+    "english": "put my proxy / attendance"
+  },
+  {
+    "kanglish": "gala",
+    "english": "put"
+  },
+  {
+    "kanglish": "galonk",
+    "english": "to put"
+  },
+  {
+    "kanglish": "pole",
+    "english": "watch / see / watching"
+  },
+  {
+    "kanglish": "polei",
+    "english": "watch / see / watching"
+  },
+  {
+    "kanglish": "polita",
+    "english": "watch / see / watching"
+  },
+  {
+    "kanglish": "dd",
+    "english": "what"
+  },
+  {
+    "kanglish": "avnd und",
+    "english": "is happening / going on"
+  },
+  {
+    "kanglish": "mltond ulla",
+    "english": "are doing / is doing"
+  },
+  {
+    "kanglish": "ulra",
+    "english": "are you there / are they there"
+  },
+  {
+    "kanglish": "yrla",
+    "english": "anyone / someone"
+  },
+  {
+    "kanglish": "mthrla",
+    "english": "everyone / all"
+  },
+  {
+    "kanglish": "ij",
+    "english": "no / not there / don't have"
+  },
+  {
+    "kanglish": "amdh",
+    "english": "yes / right / is it so"
+  },
+  {
+    "kanglish": "pdl",
+    "english": "put / post / mark (e.g., attendance)"
+  },
+  {
+    "kanglish": "malp",
+    "english": "do / make"
+  },
+  {
+    "kanglish": "mlpu",
+    "english": "do / make"
+  },
+  {
+    "kanglish": "ylle",
+    "english": "tomorrow"
+  },
+  {
+    "kanglish": "klpu",
+    "english": "study / learn"
+  },
+  {
+    "kanglish": "muchondh",
+    "english": "shut up and..."
+  },
+  {
+    "kanglish": "gottuna",
+    "english": "Do you know?"
+  },
+  {
+    "kanglish": "keppadepe",
+    "english": "will slap your cheek"
+  },
+  {
+    "kanglish": "bvc",
+    "english": "bastard / useless fellow (common Mangalore slang)"
+  },
+  {
+    "kanglish": "byaversi",
+    "english": "bastard / useless fellow (common Mangalore slang)"
+  },
+  {
+    "kanglish": "bevarsi",
+    "english": "bastard / useless fellow (common Mangalore slang)"
+  },
+  {
+    "kanglish": "bvcc",
+    "english": "bastard / useless fellow (common Mangalore slang)"
+  },
+  {
+    "kanglish": "bvv",
+    "english": "bastard / useless fellow (common Mangalore slang)"
+  },
+  {
+    "kanglish": "bbc",
+    "english": "bastard / useless fellow (common Mangalore slang)"
+  },
+  {
+    "kanglish": "bolimaga",
+    "english": "son of a bitch / bastard"
+  },
+  {
+    "kanglish": "bolimaganakk",
+    "english": "sons of bitches / bastards"
+  },
+  {
+    "kanglish": "bolimagab",
+    "english": "son of a bitch / bastard"
+  },
+  {
+    "kanglish": "rande",
+    "english": "whore"
+  },
+  {
+    "kanglish": "randemaga",
+    "english": "son of a whore"
+  },
+  {
+    "kanglish": "rande maga",
+    "english": "son of a whore"
+  },
+  {
+    "kanglish": "rande mage",
+    "english": "son of a whore"
+  },
+  {
+    "kanglish": "rand",
+    "english": "whore"
+  },
+  {
+    "kanglish": "soole",
+    "english": "prostitute / whore"
+  },
+  {
+    "kanglish": "sule",
+    "english": "prostitute / whore"
+  },
+  {
+    "kanglish": "sulemaga",
+    "english": "son of a bitch"
+  },
+  {
+    "kanglish": "soolele",
+    "english": "prostitute / son of a bitch (slang insult)"
+  },
+  {
+    "kanglish": "sulle munde",
+    "english": "prostitute / son of a bitch (slang insult)"
+  },
+  {
+    "kanglish": "soolr",
+    "english": "prostitute / son of a bitch (slang insult)"
+  },
+  {
+    "kanglish": "chakka",
+    "english": "transgender slur / coward / useless guy (slang insult)"
+  },
+  {
+    "kanglish": "chakke",
+    "english": "transgender slur / coward / useless guy (slang insult)"
+  },
+  {
+    "kanglish": "chkk",
+    "english": "transgender slur / coward / useless guy (slang insult)"
+  },
+  {
+    "kanglish": "chkka",
+    "english": "transgender slur / coward / useless guy (slang insult)"
+  },
+  {
+    "kanglish": "kunne",
+    "english": "dick / penis (vulgar slang)"
+  },
+  {
+    "kanglish": "kunnr",
+    "english": "dick / penis (vulgar slang)"
+  },
+  {
+    "kanglish": "kunr",
+    "english": "dick / penis (vulgar slang)"
+  },
+  {
+    "kanglish": "kunde",
+    "english": "dick / penis (vulgar slang)"
+  },
+  {
+    "kanglish": "pooti",
+    "english": "pussy / vagina (vulgar slang)"
+  },
+  {
+    "kanglish": "pooty",
+    "english": "pussy / vagina (vulgar slang)"
+  },
+  {
+    "kanglish": "potti",
+    "english": "pussy / vagina (vulgar slang)"
+  },
+  {
+    "kanglish": "puki",
+    "english": "pussy / vagina (vulgar slang)"
+  },
+  {
+    "kanglish": "peenkan",
+    "english": "ass / butt / asshole (vulgar slang)"
+  },
+  {
+    "kanglish": "pinkan",
+    "english": "ass / butt / asshole (vulgar slang)"
+  },
+  {
+    "kanglish": "pikan",
+    "english": "ass / butt / asshole (vulgar slang)"
+  },
+  {
+    "kanglish": "pukuli",
+    "english": "ass / butt / asshole (vulgar slang)"
+  },
+  {
+    "kanglish": "thikka",
+    "english": "ass / butt / asshole (vulgar slang)"
+  },
+  {
+    "kanglish": "pothel",
+    "english": "balls / testicles"
+  },
+  {
+    "kanglish": "pottel",
+    "english": "balls / testicles"
+  },
+  {
+    "kanglish": "bajil",
+    "english": "flattened rice / poha"
+  },
+  {
+    "kanglish": "urchuna",
+    "english": "masturbating / shitting (context-dependent vulgar slang)"
+  },
+  {
+    "kanglish": "urchina",
+    "english": "masturbating / shitting (context-dependent vulgar slang)"
+  },
+  {
+    "kanglish": "potre",
+    "english": "to fuck / screwed / destroyed (slang)"
+  },
+  {
+    "kanglish": "potave",
+    "english": "to fuck / screwed / destroyed (slang)"
+  },
+  {
+    "kanglish": "potyer",
+    "english": "to fuck / screwed / destroyed (slang)"
+  },
+  {
+    "kanglish": "potiyer",
+    "english": "to fuck / screwed / destroyed (slang)"
+  },
+  {
+    "kanglish": "potu",
+    "english": "to fuck / screwed / destroyed (slang)"
+  },
+  {
+    "kanglish": "potla",
+    "english": "to fuck / screwed / destroyed (slang)"
+  },
+  {
+    "kanglish": "shata",
+    "english": "pubic hair / bullshit"
+  },
+  {
+    "kanglish": "shatta",
+    "english": "pubic hair / bullshit"
+  },
+  {
+    "kanglish": "shenta",
+    "english": "pubic hair / bullshit"
+  },
+  {
+    "kanglish": "lavda",
+    "english": "dick / dickhead"
+  },
+  {
+    "kanglish": "lawde",
+    "english": "dick / dickhead"
+  },
+  {
+    "kanglish": "bsdk",
+    "english": "son of a bitch"
+  },
+  {
+    "kanglish": "mc",
+    "english": "motherfucker"
+  },
+  {
+    "kanglish": "bc",
+    "english": "sisterfucker"
+  },
+  {
+    "kanglish": "ushna",
+    "english": "horny / heat"
+  },
+  {
+    "kanglish": "charbi joru",
+    "english": "too much attitude / arrogance"
+  },
+  {
+    "kanglish": "ahankara",
+    "english": "arrogance"
+  },
+  {
+    "kanglish": "latpot",
+    "english": "useless / terrible"
+  },
+  {
+    "kanglish": "dabba",
+    "english": "trash / terrible"
+  },
+  {
+    "kanglish": "pokade",
+    "english": "unnecessarily / for no reason"
+  },
+  {
+    "kanglish": "parkote chaddi",
+    "english": "torn underwear"
+  },
+  {
+    "kanglish": "kunte",
+    "english": "dwarf (roast nickname)"
+  },
+  {
+    "kanglish": "kunta",
+    "english": "dwarf (roast nickname)"
+  },
+  {
+    "kanglish": "keburese",
+    "english": "deaf guy (roast nickname)"
+  },
+  {
+    "kanglish": "gottunda",
+    "english": "Do you know?"
+  },
+  {
+    "kanglish": "kenodchi",
+    "english": "don't ask"
+  },
+  {
+    "kanglish": "aand",
+    "english": "yes / happened"
+  },
+  {
+    "kanglish": "att",
+    "english": "not"
+  },
+  {
+    "kanglish": "bodu",
+    "english": "want / need"
+  },
+  {
+    "kanglish": "ken",
+    "english": "ask / listen"
+  },
+  {
+    "kanglish": "kenla",
+    "english": "ask!"
+  },
+  {
+    "kanglish": "kenuve",
+    "english": "I will ask"
+  },
+  {
+    "kanglish": "bare",
+    "english": "write"
+  },
+  {
+    "kanglish": "barela",
+    "english": "write!"
+  },
+  {
+    "kanglish": "kalpodu",
+    "english": "must study"
+  },
+  {
+    "kanglish": "kaldiji",
+    "english": "didn't study"
+  },
+  {
+    "kanglish": "madhyana",
+    "english": "afternoon"
+  },
+  {
+    "kanglish": "rathre",
+    "english": "night"
+  },
+  {
+    "kanglish": "tindi",
+    "english": "snack / food"
+  },
+  {
+    "kanglish": "neer",
+    "english": "water"
+  },
+  {
+    "kanglish": "par",
+    "english": "drink"
+  },
+  {
+    "kanglish": "undu",
+    "english": "there is"
+  },
+  {
+    "kanglish": "undh",
+    "english": "this"
+  },
+  {
+    "kanglish": "unda",
+    "english": "is there?"
+  },
+  {
+    "kanglish": "potara",
+    "english": "did everyone go?"
+  },
+  {
+    "kanglish": "poyiji",
+    "english": "didn't go"
+  },
+  {
+    "kanglish": "povodchi",
+    "english": "don't go"
+  },
+  {
+    "kanglish": "deppu",
+    "english": "remove / delete / take"
+  },
+  {
+    "kanglish": "dett",
+    "english": "remove / delete / take"
+  },
+  {
+    "kanglish": "dethonle",
+    "english": "remove / delete / take"
+  },
+  {
+    "kanglish": "deppuji",
+    "english": "won't remove / delete"
+  },
+  {
+    "kanglish": "paadodu",
+    "english": "must put / post"
+  },
+  {
+    "kanglish": "padodchi",
+    "english": "don't put / post"
+  },
+  {
+    "kanglish": "gothu",
+    "english": "know"
+  },
+  {
+    "kanglish": "gottijii",
+    "english": "don't know"
+  },
+  {
+    "kanglish": "gotthapuja",
+    "english": "can't tell"
+  },
+  {
+    "kanglish": "yaavu",
+    "english": "enough"
+  },
+  {
+    "kanglish": "yavu",
+    "english": "enough"
+  },
+  {
+    "kanglish": "yavuji",
+    "english": "not enough"
+  },
+  {
+    "kanglish": "koru",
+    "english": "give"
+  },
+  {
+    "kanglish": "korpe",
+    "english": "I will give"
+  },
+  {
+    "kanglish": "korle",
+    "english": "please give"
+  },
+  {
+    "kanglish": "korthiji",
+    "english": "didn't give"
+  },
+  {
+    "kanglish": "kanala",
+    "english": "bring"
+  },
+  {
+    "kanglish": "kanapuje",
+    "english": "he doesn't bring"
+  },
+  {
+    "kanglish": "hav",
+    "english": "I"
+  },
+  {
+    "kanglish": "maka",
+    "english": "to me"
+  },
+  {
+    "kanglish": "muje",
+    "english": "my"
+  },
+  {
+    "kanglish": "tuka",
+    "english": "to you"
+  },
+  {
+    "kanglish": "ami",
+    "english": "we"
+  },
+  {
+    "kanglish": "tumi",
+    "english": "you all"
+  },
+  {
+    "kanglish": "odilla",
+    "english": "have not studied / did not read (past/perfect negative)",
+    "fuzzy_match": false
+  },
+  {
+    "kanglish": "kalthilla",
+    "english": "have not studied / did not read (past/perfect negative)"
+  },
+  {
+    "kanglish": "odalla",
+    "english": "do not study / will not read (habitual/future negative)",
+    "fuzzy_match": false
+  },
+  {
+    "kanglish": "kaliyalla",
+    "english": "do not study / will not read (habitual/future negative)"
+  },
+  {
+    "kanglish": "baredilla",
+    "english": "have not written / did not write (past/perfect negative)"
+  },
+  {
+    "kanglish": "bardilla",
+    "english": "have not written / did not write (past/perfect negative)"
+  },
+  {
+    "kanglish": "baredhu kolli",
+    "english": "please write down / note down (polite)"
+  },
+  {
+    "kanglish": "bardkolli",
+    "english": "please write down / note down (polite)"
+  },
+  {
+    "kanglish": "kari",
+    "english": "call! / invite! (takes accusative -na / -nna on human object)"
+  },
+  {
+    "kanglish": "kariri",
+    "english": "call! / invite! (takes accusative -na / -nna on human object)"
+  },
+  {
+    "kanglish": "kariyiri",
+    "english": "call! / invite! (takes accusative -na / -nna on human object)"
+  },
+  {
+    "kanglish": "oota maadu",
+    "english": "have lunch/dinner! / eat your meal! (singular / polite)"
+  },
+  {
+    "kanglish": "oota maadi",
+    "english": "have lunch/dinner! / eat your meal! (singular / polite)"
+  },
+  {
+    "kanglish": "nodi",
+    "english": "please look / watch / check (polite)"
+  },
+  {
+    "kanglish": "nodthini",
+    "english": "I will look / watch / check"
+  },
+  {
+    "kanglish": "aagtha ideya",
+    "english": "is it working? / is it happening? (present interrogative)"
+  },
+  {
+    "kanglish": "aagthideya",
+    "english": "is it working? / is it happening? (present interrogative)"
+  },
+  {
+    "kanglish": "work aagthideya",
+    "english": "is it working? / is it happening? (present interrogative)"
+  },
+  {
+    "kanglish": "bartha ideya",
+    "english": "is it coming? / is it coming through (e.g., notification/signal)?"
+  },
+  {
+    "kanglish": "barthideya",
+    "english": "is it coming? / is it coming through (e.g., notification/signal)?"
+  },
+  {
+    "kanglish": "hathra ... ide / illa",
+    "english": "have / do not have (physical possession of an object or money)"
+  },
+  {
+    "kanglish": "-na",
+    "english": "accusative case marker for human/animate direct objects (e.g., Kiranna kari, Kavyana kari)"
+  },
+  {
+    "kanglish": "-nna",
+    "english": "accusative case marker for human/animate direct objects (e.g., Kiranna kari, Kavyana kari)"
+  },
+  {
+    "kanglish": "-annu",
+    "english": "accusative case marker for human/animate direct objects (e.g., Kiranna kari, Kavyana kari)"
+  },
+  {
+    "kanglish": "-alli",
+    "english": "locative case marker meaning 'in / at' (e.g., class nalli, hostel nalli)"
+  },
+  {
+    "kanglish": "-nalli",
+    "english": "locative case marker meaning 'in / at' (e.g., class nalli, hostel nalli)"
+  },
+  {
+    "kanglish": "nanna hathra",
+    "english": "I have / in my possession"
+  },
+  {
+    "kanglish": "ninna hathra",
+    "english": "you have / in your possession"
+  },
+  {
+    "kanglish": "goli baje",
+    "english": "crispy coastal spiced fritters"
+  },
+  {
+    "kanglish": "Mangalore buns",
+    "english": "sweet banana puris"
+  },
+  {
+    "kanglish": "neer dosa",
+    "english": "delicate lace rice crepes"
+  },
+  {
+    "kanglish": "neer dose",
+    "english": "delicate lace rice crepes (Tulu)"
+  },
+  {
+    "kanglish": "patrode",
+    "english": "spiced colocasia leaf roll"
+  },
+  {
+    "kanglish": "semige",
+    "english": "rice vermicelli noodles"
+  },
+  {
+    "kanglish": "shemige",
+    "english": "rice vermicelli noodles"
+  },
+  {
+    "kanglish": "basale",
+    "english": "Malabar spinach"
+  },
+  {
+    "kanglish": "basale soppu",
+    "english": "Malabar spinach leaves"
+  },
+  {
+    "kanglish": "anjal meenu",
+    "english": "kingfish / seer fish"
+  },
+  {
+    "kanglish": "anjal meen",
+    "english": "kingfish / seer fish (Tulu)"
+  },
+  {
+    "kanglish": "bangude fry",
+    "english": "mackerel fry"
+  },
+  {
+    "kanglish": "boothai meenu",
+    "english": "sardine fish"
+  },
+  {
+    "kanglish": "boothai meen",
+    "english": "sardine fish (Tulu)"
+  },
+  {
+    "kanglish": "manji fry",
+    "english": "pomfret fry"
+  },
+  {
+    "kanglish": "yetti sukka",
+    "english": "prawn sukka"
+  },
+  {
+    "kanglish": "kori rotti",
+    "english": "chicken curry with crisp rice wafers"
+  },
+  {
+    "kanglish": "pelakai",
+    "english": "raw jackfruit (Tulu)"
+  },
+  {
+    "kanglish": "gujje",
+    "english": "tender jackfruit"
+  },
+  {
+    "kanglish": "neyyi",
+    "english": "ghee / clarified butter (Tulu)"
+  },
+  {
+    "kanglish": "majji",
+    "english": "buttermilk (Tulu)"
+  },
+  {
+    "kanglish": "peer",
+    "english": "milk (Tulu)"
+  },
+  {
+    "kanglish": "perugu",
+    "english": "curd / yogurt (Tulu)"
+  },
+  {
+    "kanglish": "nukkal",
+    "english": "broken rice meal (Tulu)"
+  },
+  {
+    "kanglish": "bhoota kola",
+    "english": "sacred coastal spirit-deity ritual dance"
+  },
+  {
+    "kanglish": "kambula",
+    "english": "traditional coastal buffalo slush-track race (Tulu)"
+  },
+  {
+    "kanglish": "kambala",
+    "english": "traditional coastal buffalo slush-track race"
+  },
+  {
+    "kanglish": "daiva madipu",
+    "english": "sacred invocation prayer to guardian spirit"
+  },
+  {
+    "kanglish": "koragajja",
+    "english": "revered guardian spirit deity of Tulunadu"
+  },
+  {
+    "kanglish": "Panjurli",
+    "english": "guardian boar spirit deity of justice"
+  },
+  {
+    "kanglish": "Guliga",
+    "english": "fierce protector spirit deity"
+  },
+  {
+    "kanglish": "pilinalike",
+    "english": "coastal tiger dance folk performance (Tulu)"
+  },
+  {
+    "kanglish": "huli vesha",
+    "english": "tiger dance acrobatic folk performance"
+  },
+  {
+    "kanglish": "yakshagana",
+    "english": "traditional coastal dance-drama folk theatre"
+  },
+  {
+    "kanglish": "chande",
+    "english": "traditional loud percussion drum"
+  },
+  {
+    "kanglish": "agelu tambila",
+    "english": "ancestor food offering ritual"
+  },
+  {
+    "kanglish": "daiva narthaka",
+    "english": "consecrated spirit-deity dancer"
+  },
+  {
+    "kanglish": "bachal",
+    "english": "exhaustion / tiredness (Tulu)"
+  },
+  {
+    "kanglish": "bachal aathnd",
+    "english": "feeling exhausted (Tulu)"
+  },
+  {
+    "kanglish": "mande becha",
+    "english": "headache / mental stress (Tulu)"
+  },
+  {
+    "kanglish": "mande banga",
+    "english": "headache (Tulu)"
+  },
+  {
+    "kanglish": "banji banga",
+    "english": "stomach ache (Tulu)"
+  },
+  {
+    "kanglish": "dhigilu",
+    "english": "shock / fear / terror (Tulu)"
+  },
+  {
+    "kanglish": "dhigilu aand",
+    "english": "got terrified / shocked (Tulu)"
+  },
+  {
+    "kanglish": "aaram aagidiya",
+    "english": "are you feeling okay? / doing well?"
+  },
+  {
+    "kanglish": "ushaaru ullara",
+    "english": "are you feeling okay? / doing well? (Tulu)"
+  },
+  {
+    "kanglish": "meter hakra",
+    "english": "will you turn on the meter?"
+  },
+  {
+    "kanglish": "meter paadule",
+    "english": "please turn on the meter (Tulu)"
+  },
+  {
+    "kanglish": "chillare",
+    "english": "small change / coins"
+  },
+  {
+    "kanglish": "kammi maadi",
+    "english": "reduce the price"
+  },
+  {
+    "kanglish": "kore malpule",
+    "english": "reduce the price (Tulu)"
+  },
+  {
+    "kanglish": "bega bala",
+    "english": "come quickly (Tulu)"
+  },
+  {
+    "kanglish": "bega baa",
+    "english": "come quickly"
+  },
+  {
+    "kanglish": "parle",
+    "english": "please drink (Tulu)"
+  },
+  {
+    "kanglish": "parpe",
+    "english": "I will drink (Tulu)"
+  },
+  {
+    "kanglish": "parithini",
+    "english": "drank / had a drink (Tulu)"
+  },
+  {
+    "kanglish": "onaspule",
+    "english": "please have your meal (Tulu)"
+  },
+  {
+    "kanglish": "onas aanda",
+    "english": "did you have your meal? (Tulu)"
+  },
+  {
+    "kanglish": "en saav guru",
+    "english": "what a nuisance / headache bro"
+  },
+  {
+    "kanglish": "dada saav marre",
+    "english": "what a nuisance / headache man (Tulu)"
+  },
+  {
+    "kanglish": "bhari laak undu",
+    "english": "fantastic / looks awesome (Tulu)"
+  },
+  {
+    "kanglish": "sakkath aagide",
+    "english": "awesome / fantastic"
+  },
+  {
+    "kanglish": "bombat oota",
+    "english": "superb food"
+  },
+  {
+    "kanglish": "scene illa",
+    "english": "no problem at all"
+  },
+  {
+    "kanglish": "scene ijji",
+    "english": "no problem at all (Tulu)"
+  },
+  {
+    "kanglish": "sumne iru",
+    "english": "keep quiet / stay calm"
+  },
+  {
+    "kanglish": "muchond kullu",
+    "english": "sit quietly with mouth shut (Tulu)"
+  },
+  {
+    "kanglish": "bekitha nange",
+    "english": "did I really need this trouble?"
+  },
+  {
+    "kanglish": "enk boditha",
+    "english": "did I really need this trouble? (Tulu)"
+  },
+  {
+    "kanglish": "ganchali bidu",
+    "english": "cut the arrogance / stop showing off"
+  },
+  {
+    "kanglish": "ganchali budle",
+    "english": "cut the arrogance / stop showing off (Tulu)"
+  },
+  {
+    "kanglish": "chaavadi",
+    "english": "courtyard / open verandah (Tulu)"
+  },
+  {
+    "kanglish": "jagali",
+    "english": "front porch / verandah"
+  },
+  {
+    "kanglish": "mitt",
+    "english": "on / above (Tulu)"
+  },
+  {
+    "kanglish": "tirth",
+    "english": "under / below (Tulu)"
+  },
+  {
+    "kanglish": "dumbu",
+    "english": "in front of / ahead (Tulu)"
+  },
+  {
+    "kanglish": "pira",
+    "english": "behind (Tulu)"
+  },
+  {
+    "kanglish": "mele",
+    "english": "on / upon / above"
+  },
+  {
+    "kanglish": "kelage",
+    "english": "under / below"
+  },
+  {
+    "kanglish": "hinde",
+    "english": "behind / ago"
+  },
+  {
+    "kanglish": "aanda",
+    "english": "but / however (Tulu)"
+  },
+  {
+    "kanglish": "aadre",
+    "english": "but / however"
+  },
+  {
+    "kanglish": "dayeg pandha",
+    "english": "because (Tulu)"
+  },
+  {
+    "kanglish": "yaakandre",
+    "english": "because"
+  },
+  {
+    "kanglish": "posa",
+    "english": "new (Tulu)"
+  },
+  {
+    "kanglish": "para",
+    "english": "old (Tulu)"
+  },
+  {
+    "kanglish": "hosa",
+    "english": "new"
+  },
+  {
+    "kanglish": "hale",
+    "english": "old"
+  },
+  {
+    "kanglish": "lashe",
+    "english": "hot / warm (Tulu)"
+  },
+  {
+    "kanglish": "thampu",
+    "english": "cool / chilled (Tulu)"
+  },
+  {
+    "kanglish": "bisi",
+    "english": "hot / warm"
+  },
+  {
+    "kanglish": "thanpu",
+    "english": "cold / chilly"
+  },
+  {
+    "kanglish": "dodda",
+    "english": "big / large"
+  },
+  {
+    "kanglish": "chikka",
+    "english": "small / little"
+  },
+  {
+    "kanglish": "porlu",
+    "english": "beautiful / handsome (Tulu)"
+  },
+  {
+    "kanglish": "chanda",
+    "english": "beautiful / pretty"
+  },
+  {
+    "kanglish": "sundara",
+    "english": "beautiful / handsome"
+  },
+  {
+    "kanglish": "olleyadhu",
+    "english": "good / fine"
+  },
+  {
+    "kanglish": "kettadhu",
+    "english": "bad / wicked"
+  },
+  {
+    "kanglish": "boldu",
+    "english": "white (Tulu)"
+  },
+  {
+    "kanglish": "bili",
+    "english": "white"
+  },
+  {
+    "kanglish": "kappu",
+    "english": "black / dark"
+  },
+  {
+    "kanglish": "kempu",
+    "english": "red"
+  },
+  {
+    "kanglish": "pacche",
+    "english": "green (Tulu)"
+  },
+  {
+    "kanglish": "hasiru",
+    "english": "green"
+  },
+  {
+    "kanglish": "angi",
+    "english": "shirt"
+  },
+  {
+    "kanglish": "seere",
+    "english": "saree"
+  },
+  {
+    "kanglish": "mundu",
+    "english": "waistcloth / lungi"
+  },
+  {
+    "kanglish": "chappali",
+    "english": "slippers / sandals"
+  },
+  {
+    "kanglish": "chappal",
+    "english": "slippers / sandals (Tulu)"
+  },
+  {
+    "kanglish": "chatri",
+    "english": "umbrella"
+  },
+  {
+    "kanglish": "kannadi",
+    "english": "spectacles / mirror (Tulu)"
+  },
+  {
+    "kanglish": "kannadaka",
+    "english": "spectacles / eyeglasses"
+  },
+  {
+    "kanglish": "bangara",
+    "english": "gold / golden jewelry"
+  },
+  {
+    "kanglish": "chinna",
+    "english": "gold"
+  },
+  {
+    "kanglish": "belli",
+    "english": "silver"
+  },
+  {
+    "kanglish": "meshtru",
+    "english": "teacher / professor"
+  },
+  {
+    "kanglish": "dosth",
+    "english": "friend (Tulu)"
+  },
+  {
+    "kanglish": "snehitha",
+    "english": "friend"
+  },
+  {
+    "kanglish": "geleyaru",
+    "english": "friends / companions"
+  },
+  {
+    "kanglish": "use ejji",
+    "english": "no use / useless (Tulu)"
+  },
+  {
+    "kanglish": "athunda",
+    "english": "if it happened / if occurred (Tulu)"
+  },
+  {
+    "kanglish": "ethunde",
+    "english": "would have been (Tulu)"
+  },
+  {
+    "kanglish": "maddi",
+    "english": "please do / make (colloquial)"
+  },
+  {
+    "kanglish": "popini",
+    "english": "going (Tulu)"
+  },
+  {
+    "kanglish": "paardh",
+    "english": "having kept / saved (Tulu)"
+  },
+  {
+    "kanglish": "vol ulla",
+    "english": "where are you? (Tulu)"
+  },
+  {
+    "kanglish": "edde aale",
+    "english": "become good / improve (Tulu)"
+  },
+  {
+    "kanglish": "deth dakelle",
+    "english": "throw it away / discard (Tulu)"
+  },
+  {
+    "kanglish": "bathijer",
+    "english": "has not arrived (Tulu)"
+  },
+  {
+    "kanglish": "dala korod",
+    "english": "should anything be given? (Tulu)"
+  },
+  {
+    "kanglish": "bajil maldher",
+    "english": "flattened like poha / roasted (Tulu banter)"
+  },
+  {
+    "kanglish": "vasane mini",
+    "english": "smell or something similar (Tulu)"
+  },
+  {
+    "kanglish": "paje padondh uller",
+    "english": "studying hard / mugging up (Tulu)"
+  },
+  {
+    "kanglish": "latpot joke",
+    "english": "useless / lame joke (Tulu)"
+  }
+]

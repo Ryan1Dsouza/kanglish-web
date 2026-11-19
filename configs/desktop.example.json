@@ -1,0 +1,10 @@
+{
+  "binary": ".tools/desktop/b12478/llama-server.exe",
+  "model": "models/deployment/gemma_v5_3epochs_20261117/kanglish-gemma-3-1b-it-Q4_K_M.gguf",
+  "model_sha256": "12d2c4c56b583d58cea93ca0201516d873d5db389eb8690a26ea3cf3c07f0945",
+  "gpu_layers": 99,
+  "context_size": 2048,
+  "runtime_port": 8001,
+  "port": 8000,
+  "verification_model": "gemini-3.5-flash-lite"
+}

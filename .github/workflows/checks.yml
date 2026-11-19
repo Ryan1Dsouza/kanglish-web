@@ -1,0 +1,34 @@
+name: Website checks
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Guard and functional checks
+        run: |
+          python3 scripts/security_check.py
+          python3 -m unittest discover -s tests -p 'test_desktop_*.py'
+          node --check mobile/desktop/app.js
+          node tests/desktop_web_state.test.cjs
+      - name: Verify Gitleaks release and scan files plus full history
+        shell: bash
+        run: |
+          set -euo pipefail
+          tool_dir=$(mktemp -d)
+          cd "$tool_dir"
+          base=https://github.com/gitleaks/gitleaks/releases/download/v8.30.1
+          curl --fail --silent --show-error --location "$base/gitleaks_8.30.1_linux_x64.tar.gz" -o gitleaks_8.30.1_linux_x64.tar.gz
+          curl --fail --silent --show-error --location "$base/gitleaks_8.30.1_checksums.txt" -o checksums.txt
+          awk '$2 == "gitleaks_8.30.1_linux_x64.tar.gz"' checksums.txt > selected.sha256
+          test -s selected.sha256
+          sha256sum --check selected.sha256
+          tar -xzf gitleaks_8.30.1_linux_x64.tar.gz gitleaks
+          cd "$GITHUB_WORKSPACE"
+          "$tool_dir/gitleaks" dir . --redact --no-banner
+          "$tool_dir/gitleaks" git . --redact --no-banner --log-opts=--all

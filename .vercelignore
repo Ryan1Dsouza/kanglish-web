@@ -1,0 +1,14 @@
+.git/
+.env
+.env.*
+*.env
+.tools/
+results/
+tmp/
+configs/*.local.json
+**/*.sqlite*
+**/*.db
+**/*corrections*.json
+**/*.gguf
+**/*.key
+**/*.pem
