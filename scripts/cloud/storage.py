@@ -35,7 +35,7 @@ class MemoryStore(Store):
             cursor = self.db.execute(f'SELECT * FROM {table}')
             columns = [column[0] for column in cursor.description]
             result[field] = [dict(zip(columns, row)) for row in cursor.fetchall()]
-        if len(result['corrections']) > 1000 or len(result['links']) > 10000 or len(json.dumps(result).encode()) > 1048576:
+        if len(result['corrections']) > 5000 or len(result['links']) > 10000 or len(json.dumps(result).encode()) > 2097152:
             raise ValueError('Your dictionary has reached its storage limit. Export and remove older entries first.')
         return result
 

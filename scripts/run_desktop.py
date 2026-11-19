@@ -155,7 +155,14 @@ def merge_word_meanings(*meanings):
 def parse_sentence_batch(text):
     """Read supplied translations and explicit word meanings without model calls."""
     text = bounded_text(text, "Batch text", MAX_BULK_TEXT_CHARS)
-    blocks, current, field = [], {}, None
+    blocks, current, field, item_number = [], {}, None, None
+
+    def finish_item():
+        nonlocal current, field, item_number
+        if current:
+            current['item'] = item_number if item_number is not None else len(blocks) + 1
+            blocks.append(current)
+        current, field, item_number = {}, None, None
     # Accept any source-language label that isn't English or Word Mapping
     # so Tuluglish:, Kanglish:, or any future dialect label all work.
     labels = re.compile(r"^(?:[-*•]\s+)?(?:\*\*)?(English|Word\s+Mappings?|[A-Za-z][A-Za-z0-9_-]*)(?:\*\*)?\s*:\s*(?:\*\*)?(.*)$", re.I)
@@ -163,7 +170,14 @@ def parse_sentence_batch(text):
     MAPPING_FIELDS = {"word mapping", "word mappings"}
     for line_number, raw in enumerate(text.splitlines(), 1):
         line = raw.strip()
-        if not line or line.startswith("```") or re.fullmatch(r"\d+[.)]", line):
+        if not line or line.startswith("```"):
+            continue
+        number = re.fullmatch(r"(\d+)[.)]", line)
+        if number:
+            if not current and item_number is not None:
+                raise ValueError(f'Item {item_number}: add the source sentence and English translation.')
+            finish_item()
+            item_number = int(number[1])
             continue
         match = labels.match(line)
         if match:
@@ -174,24 +188,27 @@ def parse_sentence_batch(text):
                 field = "mappings"
             else:
                 field = "original"  # kanglish, tuluglish, or any dialect name
-            if field == "original" and current:
-                blocks.append(current)
-                current = {}
+            if field in ('original', 'english') and field in current and 'original' in current and 'english' in current:
+                finish_item()
+                field = 'english' if label in ENGLISH_FIELDS else 'original'
             if field in current:
                 raise ValueError(f"Line {line_number}: duplicate {label} field in the same item.")
-            if field != "original" and "original" not in current:
-                raise ValueError(f"Line {line_number}: start each item with the source language label (e.g. Kanglish: or Tuluglish:).")
+            if field == 'mappings' and not {'original', 'english'} <= current.keys():
+                raise ValueError(f"Line {line_number}: add both the source language and English before Word Mapping.")
             current[field] = match[2].strip()
         elif field:
             current[field] += "\n" + line
         else:
             raise ValueError(f"Line {line_number}: expected a source label (Kanglish:, Tuluglish:), English:, or Word Mapping:.")
     if current:
-        blocks.append(current)
+        finish_item()
+    elif item_number is not None:
+        raise ValueError(f'Item {item_number}: add the source sentence and English translation.')
     if not 1 <= len(blocks) <= MAX_BATCH_CASES:
         raise ValueError(f"Paste between 1 and {MAX_BATCH_CASES} sentence items per batch.")
     result, total_words, skipped_mappings = [], 0, []
     for index, block in enumerate(blocks, 1):
+        index = block['item']
         try:
             original = bounded_text(block.get("original"), "Kanglish sentence")
             english = bounded_text(block.get("english"), "English translation")
@@ -448,6 +465,19 @@ class Store:
         with self.connect() as db:
             db.execute("DELETE FROM corrections WHERE key=? AND dialect=?", (key(original), dialect))
             db.execute("DELETE FROM glossary_links WHERE (term_key=? OR parent_key=?) AND dialect=?", (key(original), key(original), dialect))
+
+    def dictionary_info(self, dialect='kanglish'):
+        rows = self.export(dialect)
+        version = hashlib.sha256(json.dumps(rows, sort_keys=True).encode()).hexdigest()
+        return {'dialect': dialect, 'entries': len(rows), 'version': version}
+
+    def remove_dictionary(self, dialect, version):
+        with self.connect() as db:
+            db.execute('BEGIN IMMEDIATE')
+            if self.dictionary_info(dialect)['version'] != version:
+                raise ValueError('The dictionary changed. Review it and confirm deletion again.')
+            db.execute('DELETE FROM glossary_links WHERE dialect=?', (dialect,))
+            db.execute('DELETE FROM corrections WHERE dialect=?', (dialect,))
 
     def put_run(self, row):
         with self.connect() as db:
@@ -825,6 +855,11 @@ def make_handler(app):
                     "dialects": app.store.list_dialects()})
             if path == "/api/dictionaries":
                 return self.send_json(app.store.list_dialects())
+            if path == '/api/dictionary/info':
+                dialect = qs.get('dialect', 'kanglish')
+                if not re.fullmatch(r'[a-z][a-z0-9_-]{0,39}', dialect):
+                    return self.send_json({'error': 'Invalid dictionary name'}, 400)
+                return self.send_json(app.store.dictionary_info(dialect))
             if path == "/api/dictionary":
                 dialect = qs.get("dialect", "kanglish")
                 if not re.fullmatch(r"[a-z][a-z0-9_-]{0,39}", dialect):
@@ -882,6 +917,11 @@ def make_handler(app):
                 if path == "/api/dictionary/delete":
                     app.store.remove(bounded_text(body.get("original"), "Original"), dialect)
                     return self.send_json({"removed": True})
+                if path == '/api/dictionaries/delete':
+                    if body.get('confirm_name') != dialect:
+                        raise ValueError('Confirm the dictionary name before deleting it.')
+                    app.store.remove_dictionary(dialect, body.get('version'))
+                    return self.send_json({'removed': True})
                 if path == "/api/dictionary/save":
                     original = bounded_text(body.get("original"), "Original")
                     english = bounded_text(body.get("english"), "English", 4000)

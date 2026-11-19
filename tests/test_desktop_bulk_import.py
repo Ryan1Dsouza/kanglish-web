@@ -114,6 +114,43 @@ English: See you tomorrow.
         self.assertEqual(parsed["items"][0]["terms"][1]["english"], "do, make")
         self.assertEqual(parsed["items"][1]["terms"], [])
 
+    def test_english_first_and_mixed_order_preserve_numbered_items(self):
+        # Supplied phrases are labelled synthetic controls, not accuracy claims.
+        text = '''313.
+English: Alarm rang, wake up and wash face.
+Kanglish: Alarm aayithu, yedhu mukha tholko.
+Word Mapping: Alarm aayithu -> Alarm rang, yedhu -> waking up, mukha tholko -> wash face
+
+314.
+Kanglish: Ondhu cup bisi black tea kudi.
+English: Drink a hot cup of black tea.
+Word Mapping: Ondhu cup -> One cup, bisi black tea -> hot black tea, kudi -> drink'''
+        parsed = parse_sentence_batch(text)
+        self.assertEqual([item['item'] for item in parsed['items']], [313, 314])
+        self.import_text(text)
+        self.assertEqual(len(self.store.export()), 8)
+        self.assertTrue(all(row['source_label'] == 'synthetic_control' for row in self.store.export()))
+        no_numbers = '\n'.join(line for line in text.splitlines() if line not in ('313.', '314.'))
+        self.assertEqual(len(parse_sentence_batch(no_numbers)['items']), 2)
+        with self.assertRaisesRegex(ValueError, 'Item 322'):
+            parse_sentence_batch(text + '\n322.\nEnglish: Incomplete synthetic control.')
+        with self.assertRaisesRegex(ValueError, 'Item 486'):
+            parse_sentence_batch(text + '\n486.')
+
+    def test_delete_dictionary_removes_links_only_for_selected_dictionary(self):
+        self.import_text(SAMPLE)
+        self.store.save('separate control', 'Separate meaning.', 'synthetic', 'synthetic_control', dialect='other')
+        info = self.store.dictionary_info()
+        self.store.save('new control', 'New meaning.', 'synthetic', 'synthetic_control')
+        with self.assertRaisesRegex(ValueError, 'dictionary changed'):
+            self.store.remove_dictionary('kanglish', info['version'])
+        self.assertTrue(self.store.export())
+        self.store.remove_dictionary('kanglish', self.store.dictionary_info()['version'])
+        self.assertEqual(self.store.export(), [])
+        with self.store.connect() as db:
+            self.assertEqual(db.execute("SELECT count(*) FROM glossary_links WHERE dialect='kanglish'").fetchone()[0], 0)
+        self.assertEqual(len(self.store.export('other')), 1)
+
     def test_missing_fields_and_malformed_mappings_reject_the_whole_batch(self):
         self.import_text(SAMPLE)
         before = self.store.export()

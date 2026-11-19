@@ -26,6 +26,7 @@ for (const match of html.matchAll(/<[^>]*\bid="([^"]+)"[^>]*>/g)) {
 const calls = []; let rejectSave = false;
 let rejectBulkImport = false;
 let stopAtTranslation = 0;
+let confirmed = false, confirmationMessages = [], rejectDelete = false;
 let bulkImportResult = {saved:true,sentences:2,word_meanings:2,added:4,updated:0,unchanged:0,skipped:0,skipped_entries:[]};
 const bulkPreview = {sentences: 2, word_meanings: 2, items: [
   {original:'ninna hesaru Rachit',english:'Your name is Rachit.',terms:[{original:'hesaru',english:'name'}],notes:[]},
@@ -41,14 +42,17 @@ const context = vm.createContext({
       path === '/api/translate' ? {id:'synthetic-control',input:body.text,translation:'Water.',seconds:.01,engine:'Mocked control',source_label:'synthetic_control'} :
       path === '/api/save' ? rejectSave ? {error: 'Save failed'} : {saved: true, english: 'Your name is Rachit.'} :
       path === '/api/dictionary' ? [] :
+      path.startsWith('/api/dictionary?') ? [] :
+      path.startsWith('/api/dictionary/info?') ? {entries:8,version:17} :
+      path === '/api/dictionaries/delete' ? rejectDelete ? {error:'The dictionary changed.'} : {removed:true} :
       path === '/api/dictionary/bulk-preview' ? bulkPreview :
       path === '/api/dictionary/bulk-import' ? rejectBulkImport ? {error:'Conflicting meaning. Nothing was imported.'} : bulkImportResult :
       path === '/api/glossary/parse' ? {terms:parsedTerms,ignored:[],notes:[]} :
       path.startsWith('/api/glossary/') && path !== '/api/glossary/save' ? [] :
       path === '/api/glossary/save' ? {saved: true, count: body.terms.length} : {};
-    return {ok: !(rejectSave && path === '/api/save') && !(rejectBulkImport && path === '/api/dictionary/bulk-import'), json: async () => result};
+    return {ok: !(rejectSave && path === '/api/save') && !(rejectBulkImport && path === '/api/dictionary/bulk-import') && !(rejectDelete && path === '/api/dictionaries/delete'), json: async () => result};
   },
-  setInterval() {}, setTimeout, navigator: {}, window: {scrollTo() {}}
+  setInterval() {}, setTimeout, navigator: {}, window: {scrollTo() {}, confirm(message) {confirmationMessages.push(message); return confirmed;}}
 });
 vm.runInContext(fs.readFileSync('mobile/desktop/app.js', 'utf8'), context);
 
@@ -199,5 +203,25 @@ vm.runInContext(fs.readFileSync('mobile/desktop/app.js', 'utf8'), context);
   await vm.runInContext(`runBatch()`, context);
   assert.equal(calls.filter(call => call.path === '/api/translate').length, 503, 'Stop completes current case and prevents further requests');
   assert.match(elements.get('batch-progress').textContent, /3\/500 completed.*stopped/);
+  vm.runInContext(`activeDialect = 'custom';`, context);
+  await vm.runInContext(`deleteDictionary()`, context);
+  assert.equal(calls.filter(call => call.path === '/api/dictionaries/delete').length, 0, 'Cancelling sends no delete request');
+  assert.match(confirmationMessages.at(-1), /custom.*8 saved entries/);
+  confirmed = true; rejectDelete = true;
+  await vm.runInContext(`deleteDictionary()`, context);
+  assert.equal(vm.runInContext('activeDialect', context), 'custom', 'Failed deletion keeps the selected dictionary');
+  assert.match(elements.get('notice').textContent, /dictionary changed/);
+  rejectDelete = false;
+  await vm.runInContext(`deleteDictionary()`, context);
+  assert.deepEqual(calls.findLast(call => call.path === '/api/dictionaries/delete').body, {dialect:'custom',confirm_name:'custom',version:17});
+  assert.equal(vm.runInContext('activeDialect', context), 'kanglish');
+  assert.equal(elements.get('dictionary-delete-button').disabled, false);
+  vm.runInContext(`dictionary = [{original:'control',english:'Synthetic.',kind:'glossary'}]; renderDictionary();`, context);
+  confirmed = false;
+  await elements.get('dictionary-rows').children[0].children[2].listeners.click();
+  assert.equal(calls.filter(call => call.path === '/api/dictionary/delete').length, 0);
+  confirmed = true;
+  await elements.get('dictionary-rows').children[0].children[2].listeners.click();
+  assert.equal(calls.filter(call => call.path === '/api/dictionary/delete').length, 1);
   console.log('Desktop word-editor state checks passed.');
 })().catch(error => {console.error(error); process.exitCode = 1;});

@@ -56,6 +56,7 @@ function renderDialectSwitcher(dialects) {
     btn.className = "dialect-pill" + (name === activeDialect ? " active" : "");
     btn.textContent = (labels[name] || name) + (count ? ` (${count})` : "");
     btn.addEventListener("click", () => {
+      if (busy || batchRunning) return;
       activeDialect = name;
       loadDialects();
       if (view_name === "dictionary") loadDictionary();
@@ -65,6 +66,7 @@ function renderDialectSwitcher(dialects) {
   const add = document.createElement("button");
   add.className = "dialect-add"; add.textContent = "+ New";
   add.addEventListener("click", () => {
+    if (busy || batchRunning) return;
     const name = prompt("New dictionary name (lowercase letters, numbers, hyphens; e.g. tuluglish):");
     if (!name) return;
     if (!/^[a-z][a-z0-9_-]{1,39}$/.test(name)) { notice("Dictionary name: start with a letter, then lowercase letters, numbers or hyphens only.", true); return; }
@@ -86,6 +88,8 @@ function setControls() {
   ["dictionary-bulk-preview-button", "dictionary-bulk-import-button"].forEach(id => {$(id).disabled = !token || busy || batchRunning;});
   $("dictionary-bulk-text").readOnly = busy || batchRunning;
   $("dictionary-bulk-replace").disabled = busy || batchRunning;
+  $("dictionary-delete-button").disabled = !token || busy || batchRunning;
+  $("dictionary-save").disabled = !token || busy || batchRunning;
 }
 function showReview(review) {
   $("verification-card").hidden = !review;
@@ -306,8 +310,31 @@ async function runBatch() {
   finally {batchRunning = false; $("stop-batch").hidden = true; setControls();}
 }
 async function loadDictionary() {
-  try {dictionary = await api(`/api/dictionary?dialect=${encodeURIComponent(activeDialect)}`); renderDictionary();}
+  const dialect = activeDialect;
+  try {
+    const rows = await api(`/api/dictionary?dialect=${encodeURIComponent(dialect)}`);
+    if (dialect !== activeDialect) return;
+    dictionary = rows; renderDictionary();
+  }
   catch (error) {notice(error.message, true);}
+}
+async function deleteDictionary() {
+  if (busy || batchRunning || !token) return;
+  const dialect = activeDialect;
+  busy = true; setControls();
+  try {
+    const info = await api(`/api/dictionary/info?dialect=${encodeURIComponent(dialect)}`);
+    if (!window.confirm(`Delete the "${dialect}" dictionary and all ${info.entries} saved entries, including linked word meanings?\n\nThis cannot be undone. Export the dictionary first if you want a backup.`)) return;
+    await api('/api/dictionaries/delete', {dialect, confirm_name: dialect, version: info.version});
+    if (!['kanglish', 'tuluglish'].includes(dialect)) activeDialect = 'kanglish';
+    dictionary = []; clearDictionaryBulkPreview();
+    await loadDialects(); await loadDictionary();
+    if (current?.dialect === dialect || (!current?.dialect && dialect === 'kanglish')) {
+      current = null; $("glossary-card").hidden = true; $("saved-status").textContent = '';
+    }
+    notice(`Deleted the "${dialect}" dictionary and its saved entries.`);
+  } catch (error) {notice(error.message, true);}
+  finally {busy = false; setControls();}
 }
 function renderDictionary() {
   $("dictionary-count").textContent = `(${dictionary.length}) · ${activeDialect}`;
@@ -317,14 +344,19 @@ function renderDictionary() {
   container.replaceChildren();
   const srcLabel = {kanglish: "Kanglish → English", tuluglish: "Tuluglish → English"}[activeDialect] || `${activeDialect} → English`;
   for (const row of dictionary.filter(row => `${row.original} ${row.english}`.toLowerCase().includes(query))) {
+    const dialect = activeDialect;
     const element = document.createElement("div"); element.className = "dictionary-row";
     const original = document.createElement("div"), english = document.createElement("div"), remove = document.createElement("button");
     original.textContent = row.original; english.textContent = row.english;
     const detail = document.createElement("small"); detail.textContent = `${srcLabel} · ${row.kind === "glossary" ? "word / phrase" : "sentence"} · approved by you`; original.append(detail);
     remove.textContent = "Remove";
     remove.addEventListener("click", async () => {
-      try {await api("/api/dictionary/delete", {original: row.original, dialect: activeDialect}); await loadDictionary(); notice("Saved meaning removed.");}
+      if (busy || batchRunning) return;
+      if (!window.confirm(`Remove "${row.original}" from the "${dialect}" dictionary?\n\nLinked word references will also be removed. This cannot be undone.`)) return;
+      busy = true; setControls();
+      try {await api("/api/dictionary/delete", {original: row.original, dialect}); await loadDictionary(); await loadDialects(); notice("Saved meaning removed.");}
       catch (error) {notice(error.message, true);}
+      finally {busy = false; setControls();}
     });
     element.append(original, english, remove); container.append(element);
   }
@@ -409,10 +441,12 @@ $("load-examples").addEventListener("click", () => {$("batch-input").value = exa
 $("run-batch").addEventListener("click", runBatch);
 $("stop-batch").addEventListener("click", () => {stopRequested = true; $("batch-progress").textContent = "Stopping after the current case…";});
 $("dictionary-search").addEventListener("input", renderDictionary);
+$("dictionary-delete-button").addEventListener("click", deleteDictionary);
 $("dictionary-bulk-text").addEventListener("input", clearDictionaryBulkPreview);
 $("dictionary-bulk-preview-button").addEventListener("click", () => dictionaryBulkAction(false));
 $("dictionary-bulk-import-button").addEventListener("click", () => dictionaryBulkAction(true));
 $("dictionary-save").addEventListener("click", async () => {
+  if (busy || batchRunning) return;
   try {await api("/api/dictionary/save", {original: $("dictionary-original").value, english: $("dictionary-english").value, dialect: activeDialect});
     $("dictionary-original").value = ""; $("dictionary-english").value = ""; await loadDictionary(); notice("Meaning saved.");}
   catch (error) {notice(error.message, true);}

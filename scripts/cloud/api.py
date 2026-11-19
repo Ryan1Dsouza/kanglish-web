@@ -25,6 +25,7 @@ ACCESS = '__Host-kanglish-access'
 REFRESH = '__Host-kanglish-refresh'
 CSRF = '__Host-kanglish-csrf'
 MAX_BODY = 100_000
+MAX_IMPORT_BODY = 1_000_000
 GLOSSARY = None
 
 class APIError(Exception):
@@ -107,7 +108,7 @@ class Service:
     def supabase(self, path, method='GET', body=None, access=None, admin=False):
         credential = self.config.service if admin else self.config.anon
         return remote(self.config.url + path, method, body,
-                      {'apikey': credential, 'Authorization': 'Bearer ' + (credential if admin else access or credential)})
+                      {'apikey': credential, 'Authorization': 'Bearer ' + (credential if admin else access or credential)}, limit=3_000_000)
 
     def user(self, access):
         if not access:
@@ -126,6 +127,9 @@ class Service:
             buckets.append({'key': 'user:' + subject + ':api', 'seconds': 60, 'limit': 90})
         elif action == 'preauth':
             pass
+        elif action == 'import':
+            buckets += [{'key': 'user:' + subject + ':import', 'seconds': 60, 'limit': 5},
+                        {'key': 'user:' + subject + ':import', 'seconds': 86400, 'limit': 50}]
         elif action in ('login', 'signup', 'refresh'):
             buckets += [{'key': 'auth:' + action, 'seconds': 60, 'limit': 40},
                         {'key': 'ip:' + ip + ':' + action, 'seconds': 86400, 'limit': 20 if action == 'signup' else 2000 if action == 'refresh' else 100}]
@@ -156,6 +160,15 @@ class Service:
     def dictionary(self, user, access, dialect):
         rows = self.query('web_dictionaries', user, access, dialect='eq.' + dialect, select='payload,version')
         return rows[0] if rows else {'payload': None, 'version': 0}
+
+    def delete_dictionary(self, access, dialect, version):
+        if isinstance(version, bool) or not isinstance(version, int) or version < 0:
+            raise APIError('Review the dictionary before confirming deletion.')
+        result = self.supabase('/rest/v1/rpc/web_delete_dictionary', 'POST',
+                               {'p_dialect': dialect, 'p_version': version}, access=access)
+        if not result or result.get('conflict') is not False:
+            raise APIError('The dictionary changed. Review it and confirm deletion again.', 409)
+        return {'removed': True}
 
     def run(self, user, access, run_id):
         if not isinstance(run_id, str) or not re.fullmatch('[a-f0-9]{32}', run_id):
@@ -370,8 +383,13 @@ class CloudHandler(BaseHTTPRequestHandler):
                 if self.headers.get('Content-Type', '').split(';', 1)[0] != 'application/json':
                     raise APIError('Send a JSON request.', 415)
                 length = int(self.headers.get('Content-Length', '0'))
-                if not 0 < length <= MAX_BODY:
-                    raise APIError('Request exceeds the 100 KB limit.', 413)
+                request_path = urlsplit(self.path).path
+                route = dict(__import__('urllib.parse', fromlist=['parse_qsl']).parse_qsl(urlsplit(self.path).query)).get('__route', '')
+                if request_path == '/api/index':
+                    request_path = '/api/' + route.strip('/')
+                maximum = MAX_IMPORT_BODY if request_path in ('/api/dictionary/bulk-preview', '/api/dictionary/bulk-import') else MAX_BODY
+                if not 0 < length <= maximum:
+                    raise APIError(f'Request exceeds the {maximum // 1000} KB limit.', 413)
                 body = json.loads(self.rfile.read(length))
                 if not isinstance(body, dict):
                     raise APIError('JSON object required.')
@@ -455,14 +473,16 @@ class CloudHandler(BaseHTTPRequestHandler):
                         writer.writerow(["'" + v if v.lstrip().startswith(('=', '+', '-', '@')) else v for v in values])
                     return self.reply(output.getvalue().encode(), kind='text/csv; charset=utf-8', filename='kanglish-history.csv')
                 if method == 'GET' and path == '/api/dictionaries':
-                    rows = service.query('web_dictionaries', user, access, select='dialect,payload')
                     result = {'kanglish': 0, 'tuluglish': 0}
-                    result.update({r['dialect']: len(r['payload']['corrections']) for r in rows})
+                    result.update(service.supabase('/rest/v1/rpc/web_dictionary_counts', 'POST', {}, access=access))
                     return self.reply(result)
                 run = None
                 if path in ('/api/save', '/api/glossary/save', '/api/glossary/parse') or path.startswith('/api/glossary/'):
                     run = service.run(user, access, body.get('id') if body else path.rsplit('/', 1)[-1])
                 dialect = valid_dialect(run['dialect'] if run else (body or query).get('dialect', 'kanglish'))
+                if method == 'GET' and path == '/api/dictionary/info':
+                    saved = service.dictionary(user, access, dialect)
+                    return self.reply({'dialect': dialect, 'entries': len((saved['payload'] or {}).get('corrections', [])), 'version': saved['version']})
                 if method == 'GET' and path in ('/api/dictionary', '/api/corrections.json') or method == 'GET' and path.startswith('/api/glossary/'):
                     saved = service.dictionary(user, access, dialect)
                     store = MemoryStore(saved['payload'])
@@ -480,21 +500,26 @@ class CloudHandler(BaseHTTPRequestHandler):
                 if method == 'POST' and path == '/api/dictionary/delete':
                     original = bounded_text(body.get('original'), 'Original')
                     return self.reply(service.mutate(user, access, dialect, lambda store: (store.remove(original, dialect), {'removed': True})[1]))
+                if method == 'POST' and path == '/api/dictionaries/delete':
+                    if body.get('confirm_name') != dialect:
+                        raise APIError('Confirm the dictionary name before deleting it.')
+                    return self.reply(service.delete_dictionary(access, dialect, body.get('version')))
                 if method == 'POST' and path == '/api/dictionary/save':
                     original = bounded_text(body.get('original'), 'Original')
                     english = bounded_text(body.get('english'), 'English')
                     return self.reply(service.mutate(user, access, dialect, lambda store: (store.save(original, english, 'web_user_dictionary', kind='glossary', dialect=dialect), {'saved': True})[1]))
                 if method == 'POST' and path in ('/api/dictionary/bulk-preview', '/api/dictionary/bulk-import'):
-                    text = bounded_text(body.get('text'), 'Batch text', 64000)
-                    parsed = parse_sentence_batch(text)
-                    if len(parsed['items']) > 20 or parsed['word_meanings'] > 400:
-                        raise APIError('Import at most 20 sentences and 400 word meanings at once.')
                     replace = body.get('replace_existing', False)
                     if not isinstance(replace, bool):
                         raise APIError('Replace existing meanings must be true or false.')
-                    if path.endswith('preview'):
-                        return self.reply(parsed)
-                    return self.reply(service.mutate(user, access, dialect, lambda store: store.import_sentence_batch(parsed, replace, dialect=dialect)))
+                    with service.budget(user['id'], fingerprint, 'import'):
+                        try:
+                            parsed = parse_sentence_batch(body.get('text'))
+                        except ValueError as error:
+                            raise APIError(str(error)) from None
+                        if path.endswith('preview'):
+                            return self.reply(parsed)
+                        return self.reply(service.mutate(user, access, dialect, lambda store: store.import_sentence_batch(parsed, replace, dialect=dialect)))
                 raise APIError('Not found.', 404)
         except APIError as error:
             self.reply({'error': str(error)}, error.status, retry_after=error.retry_after)

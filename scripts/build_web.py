@@ -23,8 +23,6 @@ def build():
         '0 / 4,000': '0 / 1,000',
         'Saved meanings are reused locally': 'Saved meanings are reused in your account',
         'Corrections saved on this laptop.': 'Corrections saved in your private account.',
-        'maxlength="640000"': 'maxlength="64000"',
-        'Up to 500 sentences and 10,000 word mappings per batch.': 'Up to 20 sentences and 400 word mappings per import.',
         'Kanglish Desktop · Gemma 1B': 'Kanglish Online · 10 translations/minute, 100/day',
         '<script src="/app.js"></script>': '<script src="/auth.js"></script>',
         '<span id="log-location"></span>': '<span id="log-location"></span><button id="logout-button">Sign out</button>',

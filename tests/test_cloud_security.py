@@ -29,6 +29,7 @@ class HostedSecurityTests(unittest.TestCase):
         self.failed = False
         self.calls = []
         self.provider_calls = 0
+        self.delete_conflict = False
 
     def tearDown(self):
         self.env.stop()
@@ -60,6 +61,13 @@ class HostedSecurityTests(unittest.TestCase):
         if path.endswith('/web_commit_dictionary'):
             self.data[owner] = body['p_payload']
             return {'conflict': False}
+        if path.endswith('/web_dictionary_counts'):
+            return {'kanglish': len(self.data[owner]['corrections'])}
+        if path.endswith('/web_delete_dictionary'):
+            if self.delete_conflict or body['p_version'] != 1:
+                return {'conflict': True}
+            self.data[owner] = {'corrections': [], 'links': []}
+            return {'conflict': False}
         if path.endswith('/web_put_run'):
             self.runs[owner][body['p_payload']['id']] = body['p_payload']
             return None
@@ -81,10 +89,11 @@ class HostedSecurityTests(unittest.TestCase):
                 server.server_close()
                 worker.join(timeout=5)
 
-    def send(self, base, path, body=None, user='user-a', origin='https://app.example', token='synthetic-csrf', **extra):
+    def send(self, base, path, body=None, user='user-a', origin='https://app.example', token='synthetic-csrf', header_only=False, **extra):
         headers = {'Cookie': f'{ACCESS}={user}; {CSRF}=synthetic-csrf', 'Origin': origin,
                    'X-Kanglish-Token': token, 'Content-Type': 'application/json', **extra}
-        request = Request(base + path, None if body is None else json.dumps(body).encode(), headers)
+        request = Request(base + path, None if body is None or header_only else json.dumps(body).encode(), headers,
+                          method='GET' if body is None else 'POST')
         try:
             response = urlopen(request, timeout=5)
         except HTTPError as error:
@@ -175,8 +184,39 @@ class HostedSecurityTests(unittest.TestCase):
     def test_vercel_rewrite_and_bounded_public_import(self):
         with self.server() as base:
             self.assertEqual(self.send(base, '/api/index?__route=status')[0], 200)
-            paste = '\n'.join(f'Kanglish: control{i}\nEnglish: Test.' for i in range(21))
-            self.assertEqual(self.send(base, '/api/dictionary/bulk-import', {'text': paste})[0], 400)
+            english = 'Synthetic test. ' + 'control ' * 40
+            paste = '\n'.join(f'{i + 1}.\nEnglish: {english}\nKanglish: control{i} token{i} word\nWord Mapping: control{i} -> control, token{i} -> token' for i in range(500))
+            code, _, result = self.send(base, '/api/dictionary/bulk-import', {'text': paste})
+            self.assertEqual(code, 200)
+            self.assertEqual((result['sentences'], result['word_meanings']), (500, 1000))
+            self.assertEqual(len(self.data[A]['corrections']), 1500)
+            self.assertEqual(self.send(base, '/api/dictionary/bulk-import', {'text': paste + '\n501.\nEnglish: Too many.\nKanglish: extra'})[0], 400)
+            self.assertRegex(self.send(base, '/api/dictionary/bulk-preview', {'text': '322.\nEnglish: Incomplete.'})[2]['error'], r'^Item 322: Kanglish sentence')
+            # An oversized declared length must be rejected before reading its body.
+            self.assertEqual(self.send(base, '/api/dictionary/bulk-preview', {}, header_only=True, **{'Content-Length': '1000001'})[0], 413)
+            self.assertEqual(self.send(base, '/api/translate', {}, header_only=True, **{'Content-Length': '100001'})[0], 413)
+            self.assertEqual(self.provider_calls, 0)
+
+    def test_dictionary_deletion_requires_confirmation_and_preserves_other_owner(self):
+        with self.server() as base:
+            self.send(base, '/api/dictionary/save', {'original': 'private control', 'english': 'Synthetic meaning.'})
+            self.send(base, '/api/dictionary/save', {'original': 'other control', 'english': 'Synthetic other.'}, user='user-b')
+            self.assertEqual(self.send(base, '/api/dictionaries')[2]['kanglish'], 1)
+            info = self.send(base, '/api/dictionary/info?dialect=kanglish')[2]
+            body = {'dialect': 'kanglish', 'version': info['version']}
+            self.assertEqual(self.send(base, '/api/dictionaries/delete', body)[0], 400)
+            body['confirm_name'] = 'kanglish'
+            self.assertEqual(self.send(base, '/api/dictionaries/delete', body, user='')[0], 401)
+            self.assertEqual(self.send(base, '/api/dictionaries/delete', body, token='wrong')[0], 403)
+            self.assertEqual(self.send(base, '/api/dictionaries/delete', body, origin='https://evil.example')[0], 403)
+            self.delete_conflict = True
+            self.assertEqual(self.send(base, '/api/dictionaries/delete', body)[0], 409)
+            self.assertTrue(self.data[A]['corrections'])
+            self.delete_conflict = False
+            body['user_id'] = B
+            self.assertEqual(self.send(base, '/api/dictionaries/delete', body)[0], 200)
+            self.assertEqual(self.data[A]['corrections'], [])
+            self.assertEqual(len(self.data[B]['corrections']), 1)
 
 if __name__ == '__main__':
     unittest.main()

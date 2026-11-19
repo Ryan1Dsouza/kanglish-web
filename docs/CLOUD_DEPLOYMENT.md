@@ -27,10 +27,22 @@ The API supports a separately hosted private llama.cpp server through an explici
   expire after 90 seconds, including when a function stops before releasing one.
 - Online inputs are limited to 1,000 message characters, 500 context characters,
   bounded output tokens, and 100 KB JSON bodies. Automated inference batches are
-  disabled. Dictionary imports allow 20 sentences/400 mappings/64,000 characters.
-- Each dictionary is bounded to 1 MB/1,000 entries, with at most 10 dictionaries
+  disabled. Dictionary imports separately allow 500 sentences/10,000 mappings/
+  640,000 characters within a 1 MB request, with shared limits of five import or
+  preview requests/minute and 50/day per user. Imports do not call a model.
+- Each dictionary is bounded to 2 MB/5,000 entries and 10,000 contextual links,
+  with at most 10 dictionaries
   per account. Dictionaries use version checks and transactionally commit saved
   result updates, preserving import semantics and supplied source/review fields.
+- Dictionary deletion requires a named confirmation and the reviewed version.
+  A concurrent update rejects deletion with a conflict; the user must review and
+  confirm again. The database deletes only the authenticated owner's dictionary.
+  Versions stay distinct if the same name is recreated. Built-in Kanglish and
+  Tuluglish selectors remain available with zero entries after deletion.
+- Numbered imports accept English/source text in either order and preserve supplied
+  numbering and wording. Incomplete items and malformed mappings reject the batch;
+  the parser does not silently fill or correct translations. Later sentence/type
+  conflicts and unmatched word mappings are reported separately in preview/import.
 - Personal history retains the latest 100 results for up to seven days. Private
   dictionaries persist until their owner removes entries or the account is deleted.
   Maintenance pruning happens during history writes. Raw messages are not printed

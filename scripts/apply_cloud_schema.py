@@ -146,7 +146,7 @@ def main():
     args = parser.parse_args()
     connection = Postgres(read_env(args.env_file)['POSTGRES_URL'])
     try:
-        migration = (ROOT / 'supabase/migrations/20261119_cloud.sql').read_text(encoding='utf-8')
+        migration = '\n'.join(path.read_text(encoding='utf-8') for path in sorted((ROOT / 'supabase/migrations').glob('*.sql')))
         connection.query('BEGIN;\n' + migration + '\nCOMMIT;')
         print('Applied private storage policies and shared quota functions.')
     finally:
