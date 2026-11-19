@@ -14,7 +14,9 @@ The API supports a separately hosted private llama.cpp server through an explici
   Supabase email recovery link using PKCE. Open the link in the same browser that
   requested it. The one-time code is removed from the page URL before API calls;
   its exchange requires a signed, one-hour HttpOnly verifier cookie. A separate
-  signed recovery cookie allows password reset for 15 minutes and cannot grant
+  signed recovery cookie is bound to the account revision, so changing the
+  password invalidates the proof even if an access JWT has not expired. It allows
+  password reset for 15 minutes and cannot grant
   access to the private workspace. Expired/used links require a new request.
 - **Change password** requires the current password to be reauthenticated against
   the validated session owner's email. Both flows enforce 12–1,024 characters,

@@ -127,6 +127,20 @@ class Service:
             raise APIError('Sign in to continue.', 401) from None
         return user
 
+    def recovery_identity(self, proof):
+        try:
+            record = json.loads(open_auth(proof, 'recovery', self.config.service, 900))
+            access = record['access']
+            revision = record['updated_at']
+            if not isinstance(access, str) or not access or not isinstance(revision, str) or not revision:
+                raise ValueError()
+        except (ValueError, KeyError, TypeError):
+            raise APIError('This reset link is invalid or already used. Request a new link.', 400) from None
+        user = self.user(access)
+        if user.get('updated_at') != revision:
+            raise APIError('This reset link is invalid or already used. Request a new link.', 400)
+        return access, user
+
     @contextmanager
     def budget(self, subject, ip, action='api', inference=False):
         buckets = [{'key': 'ip:' + ip + ':' + action, 'seconds': 60, 'limit': 120 if action in ('api', 'preauth') else 20}]
@@ -457,8 +471,7 @@ class CloudHandler(BaseHTTPRequestHandler):
                 if cookies.get(RECOVERY_SESSION):
                     with service.budget('anonymous', fingerprint, 'refresh'):
                         try:
-                            recovery_access = open_auth(cookies[RECOVERY_SESSION], 'recovery', config.service, 900)
-                            service.user(recovery_access)
+                            service.recovery_identity(cookies[RECOVERY_SESSION])
                             recovery_ready = True
                         except APIError as error:
                             if error.status not in (400, 401):
@@ -521,17 +534,19 @@ class CloudHandler(BaseHTTPRequestHandler):
                             raise APIError('This reset link is invalid or already used. Request a new link.', 400) from None
                         raise
                     recovery_access = result.get('access_token', '')
-                    service.user(recovery_access)
+                    recovery_user = service.user(recovery_access)
+                    if not recovery_user.get('updated_at'):
+                        raise APIError('The reset link could not be verified. Request a new link.', 400)
+                    recovery_record = json.dumps({'access': recovery_access, 'updated_at': recovery_user['updated_at']})
                     csrf = secrets.token_urlsafe(32)
-                    self.out_cookies += [cookie(RECOVERY_SESSION, seal_auth(recovery_access, 'recovery', config.service), 900),
+                    self.out_cookies += [cookie(RECOVERY_SESSION, seal_auth(recovery_record, 'recovery', config.service), 900),
                                          cookie(RECOVERY_VERIFIER, '', 0), cookie(ACCESS, '', 0), cookie(REFRESH, '', 0), cookie(CSRF, csrf, 604800)]
                     return self.reply({'recovery_ready': True, 'csrf': csrf})
             if path in ('/api/auth/reset-password', '/api/auth/change-password') and method == 'POST':
                 action = path.rsplit('/', 1)[-1]
                 password = password_value(body.get('password'))
                 if action == 'reset-password':
-                    change_access = open_auth(cookies.get(RECOVERY_SESSION, ''), 'recovery', config.service, 900)
-                    user = service.user(change_access)
+                    change_access, user = service.recovery_identity(cookies.get(RECOVERY_SESSION, ''))
                 else:
                     user = service.user(access)
                     change_access = access

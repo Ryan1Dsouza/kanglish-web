@@ -45,6 +45,7 @@ class PasswordSecurityTests(unittest.TestCase):
                     'refresh_token': 'synthetic-refresh', 'expires_in': 3600}
         if path == '/auth/v1/user' and method == 'PUT':
             self.updated = body['password']
+            self.account_revision = '2026-11-19T01:00:00.000Z'
             return {'id': A}
         if path == '/auth/v1/user' and getattr(self, 'revoked', False):
             raise APIError('Session ended', 401)
@@ -52,6 +53,10 @@ class PasswordSecurityTests(unittest.TestCase):
             self.assertEqual(parse_qs(urlsplit(url).query)['scope'], ['global'])
             self.revoked = True
             return None
+        if path == '/auth/v1/user':
+            user = security_controls.HostedSecurityTests.transport(self, url, method, body, headers, **kwargs)
+            user['updated_at'] = getattr(self, 'account_revision', '2026-11-19T00:00:00.000Z')
+            return user
         return security_controls.HostedSecurityTests.transport(self, url, method, body, headers, **kwargs)
 
     def send(self, base, path, body=None, cookies=None, origin='https://app.example', csrf='synthetic-csrf'):
@@ -128,7 +133,8 @@ class PasswordSecurityTests(unittest.TestCase):
 
     def test_verified_recovery_updates_password_revokes_sessions_and_clears_cookies(self):
         with self.server() as base:
-            proof = seal_auth('user-a', 'recovery', ENV['SUPABASE_SERVICE_ROLE_KEY'])
+            record = json.dumps({'access': 'user-a', 'updated_at': '2026-11-19T00:00:00.000Z'})
+            proof = seal_auth(record, 'recovery', ENV['SUPABASE_SERVICE_ROLE_KEY'])
             cookies = f'{RECOVERY_SESSION}={proof}; {CSRF}=synthetic-csrf'
             session = self.send(base, '/api/auth/session', cookies=cookies)[2]
             self.assertTrue(session['recovery_ready'])
@@ -142,6 +148,11 @@ class PasswordSecurityTests(unittest.TestCase):
             for name in (ACCESS, REFRESH, CSRF, RECOVERY_SESSION, RECOVERY_VERIFIER):
                 self.assertEqual(cleared[name]['max-age'], '0')
             self.assertEqual(self.send(base, '/api/auth/reset-password', {'password': 'Other-password-control'}, cookies)[0], 401)
+            # Supabase JWTs can survive refresh-session revocation until expiry.
+            # Account revision binding must still reject reused recovery proof.
+            self.revoked = False
+            self.assertEqual(self.send(base, '/api/auth/reset-password', {'password': 'Other-password-control'}, cookies)[0], 400)
+            self.assertEqual(self.updated, 'New-password-control')
 
     def test_password_change_requires_current_password_and_same_owner(self):
         with self.server() as base:
