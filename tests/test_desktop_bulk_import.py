@@ -280,7 +280,7 @@ Word Mapping: hesaru -> name, nanna -> mine"""
         self.assertEqual((saved["sentences"], saved["word_meanings"], saved["skipped"], saved["added"]), (10, 36, 1, 46))
         self.assertEqual(saved["skipped_entries"][0]["original"], "neeru")
         self.assertEqual(next(row for row in self.store.export() if row["original"] == "neeru"), before)
-        self.assertEqual([row["original"] for row in self.store.glossary_for("Nange neeru beku.")], ["Nange", "beku"])
+        self.assertCountEqual([row["original"] for row in self.store.glossary_for("Nange neeru beku.")], ["Nange", "beku"])
         self.assertEqual(self.import_text(CONTEXT_BATCH)["added"], 0)
 
     def test_all_existing_conflicts_are_reported_without_changes(self):

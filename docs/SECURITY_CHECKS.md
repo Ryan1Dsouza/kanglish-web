@@ -14,6 +14,9 @@
   passed, covering rate budgets, failed attempts, concurrent verification, HTTP
   authorization/origin/Host checks, private file access and redirect refusal.
 - JavaScript syntax and existing browser-independent state checks passed.
+- GitHub's Linux runner exposed an order-dependent assertion in an existing
+  import test. The assertion now checks membership; dictionary/prompt behavior
+  is unchanged, and the test still ensures a skipped sentence is excluded.
 - Existing source/review fields and Alar attribution were preserved. No model
   inference, paid API calls, training, or historical accuracy recalculation ran.
 - GitHub dependency alerts were enabled. GitHub rejected the request to enable
