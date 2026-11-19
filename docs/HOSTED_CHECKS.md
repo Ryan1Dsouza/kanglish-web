@@ -1,5 +1,24 @@
 # Hosted verification — 2026-11-19
 
+## Sidebar dictionary deletion
+
+- Implementation `4d880aa` adds a labelled Delete button beside each stored
+  dictionary, including empty named dictionaries. Unstored translation directions
+  are kept in From/To menus and do not occupy the sidebar. Named/versioned
+  confirmation, owner isolation and CSRF controls are retained.
+- All 86 Python tests and three JavaScript state suites passed. New coverage
+  verifies custom/default deletion, cancellation, conflicts, recording locks,
+  result invalidation, late dictionary response rejection, reload persistence and
+  immediate sidebar appearance after saving. Security guard and staged/full
+  history Gitleaks scans passed.
+- Production deployment `dpl_KyVH4n9wu51fPhvYYvKCFVV1hJiG` was READY and aliased
+  to https://kanglish-web.vercel.app.
+- Live checks verified stored sidebar flags, custom/default dictionary deletion,
+  absence after catalog reload, stale-version rejection and preservation of a
+  second owner's dictionary. The deployed JavaScript matched the checked build.
+  Both disposable synthetic accounts and their data were removed; no provider
+  calls or personal dictionary changes occurred.
+
 ## Language directions and audio
 
 - Generated hosted UI tests cover all 20 language pairs, five options per menu,
