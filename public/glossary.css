@@ -1,0 +1,25 @@
+.glossary-card { background: #f7faf5; }
+.bulk-word-input { padding: 18px; margin-top: 18px; border: 1px solid var(--line); border-radius: 10px; background: white; }
+.bulk-word-input label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 10px; }
+.bulk-word-input textarea { min-height: 110px; margin-bottom: 12px; }
+#glossary-parent { white-space: pre-wrap; overflow-wrap: anywhere; }
+#glossary-editor { display: grid; gap: 12px; margin: 22px 0; }
+.glossary-row { display: grid; grid-template-columns: minmax(120px, 1fr) 26px minmax(140px, 1.5fr) auto; gap: 12px; align-items: end; }
+.glossary-row label { color: var(--muted); font-size: 11px; }
+.glossary-row input { display: block; margin-top: 6px; min-width: 0; }
+.glossary-row .meaning-arrow { align-self: end; padding-bottom: 11px; text-align: center; color: var(--muted); }
+.glossary-row button { padding: 11px 12px; }
+.glossary-controls { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+#glossary-status { color: var(--green); font-size: 12px; }
+.dictionary-import-card > label:not(.check) { display: block; font-size: 12px; color: var(--muted); margin: 16px 0 8px; }
+#dictionary-bulk-text { min-height: 280px; margin-bottom: 16px; }
+.dictionary-import-card .glossary-controls { margin-top: 18px; }
+.dictionary-import-item { border-top: 1px solid var(--line); padding: 14px 0; overflow-wrap: anywhere; }
+.dictionary-import-item p { margin: 8px 0; white-space: pre-wrap; }
+#dictionary-bulk-status.error { color: var(--red); }
+@media (max-width: 650px) {
+  .glossary-row { grid-template-columns: 1fr auto; gap: 9px; padding-bottom: 15px; border-bottom: 1px solid var(--line); }
+  .glossary-row label { grid-column: 1; }
+  .glossary-row .meaning-arrow { display: none; }
+  .glossary-row button { grid-column: 2; grid-row: 1 / 3; }
+}

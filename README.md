@@ -1,5 +1,9 @@
 # Kanglish Web
 
+The hosted version uses Vercel, Supabase email/password authentication and private
+per-user dictionaries. Online translation uses Gemini 3.5 Flash Lite, with all
+credentials held on the server. [Hosted setup and controls](docs/CLOUD_DEPLOYMENT.md).
+
 Browser interface for translating Kanglish and Tuluglish to English with a local
 llama.cpp model, reviewing optional Gemini checks, and saving approved sentence
 translations and word meanings. Includes dictionary import/export and batch testing.
@@ -38,7 +42,8 @@ python scripts/security_check.py
 python -m unittest discover -s tests -p "test_desktop_*.py"
 node --check mobile/desktop/app.js
 node tests/desktop_web_state.test.cjs
-gitleaks dir . --redact --no-banner
+gitleaks git . --pre-commit --staged --redact --no-banner
+gitleaks git . --redact --no-banner --log-opts=--all
 ```
 
 The tests use synthetic controls and mocks. They do not run inference or paid API
@@ -49,13 +54,12 @@ See [the recorded security checks](docs/SECURITY_CHECKS.md).
 
 ## Vercel
 
-The current app runs a long-lived local model process and shares one local
-dictionary. Importing this repo into Vercel does **not** create a working, secure
-public translation service. There is no production Vercel deployment configured.
-
-The intended architecture is a Vercel frontend and authenticated server API, with
-a separate authenticated inference host (or an explicitly selected hosted model)
-and persistent per-user storage. See [the deployment and rate-limit plan](docs/SECURITY.md).
+`vercel.json` builds the hosted assets into `public/` and routes API requests to
+the authenticated Python function. Supabase stores private dictionaries and
+short-lived history, and enforces shared quotas across server instances.
+Gemini is the selected external inference service; the localhost Gemma app remains
+available through the commands above. Automated inference batches are disabled
+online. [Deployment instructions](docs/CLOUD_DEPLOYMENT.md).
 
 ## Provenance and data licenses
 

@@ -14,7 +14,11 @@ jobs:
         run: |
           python3 scripts/security_check.py
           python3 -m unittest discover -s tests -p 'test_desktop_*.py'
+          python3 -m unittest discover -s tests -p 'test_cloud_*.py'
+          python3 scripts/build_web.py
           node --check mobile/desktop/app.js
+          node --check public/app.js
+          node --check public/auth.js
           node tests/desktop_web_state.test.cjs
       - name: Verify Gitleaks release and scan files plus full history
         shell: bash

@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Kanglish · Online</title><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="/glossary.css"><link rel="stylesheet" href="/auth.css">
+</head>
+<body>
+<main class="auth-page" id="auth-page">
+  <div class="card auth-card">
+    <div class="eyebrow">KANGLISH ONLINE</div>
+    <h1>Your words, understood.</h1>
+    <p>Sign in to translate Kanglish and Tuluglish and keep a private dictionary.</p>
+    <form id="auth-form">
+      <label for="auth-email">Email</label>
+      <input id="auth-email" type="email" autocomplete="email" required maxlength="254">
+      <label for="auth-password">Password</label>
+      <input id="auth-password" type="password" autocomplete="current-password" required minlength="12" maxlength="1024">
+      <div class="auth-actions"><button class="primary" type="submit" data-action="login">Sign in</button><button type="submit" data-action="signup">Create account</button></div>
+    </form>
+    <p id="auth-message" role="status">Connecting securely…</p>
+    <p class="subtle" id="provider-privacy">Online translation sends your message and context to the model provider. Your saved dictionary is private to your account.</p>
+    <p class="subtle">New accounts require email confirmation. Use a password of at least 12 characters.</p>
+  </div>
+</main>
+
+<div class="shell" id="workspace" hidden>
+  <aside class="sidebar">
+    <a class="brand" href="/"><span class="brand-mark">ಕ</span><span>Kanglish<small>YOUR WORDS, UNDERSTOOD</small></span></a>
+    <nav aria-label="Main navigation">
+      <button class="nav active" data-view="translate"><span>↗</span> Translate</button>
+      <button class="nav" data-view="batch" hidden><span>▦</span> Batch tests</button>
+      <button class="nav" data-view="dictionary"><span>▤</span> My dictionary</button>
+    </nav>
+    <div class="dialect-switcher-area">
+      <span class="dialect-label">Dictionary</span>
+      <div id="dialect-switcher"></div>
+    </div>
+    <div class="sidebar-bottom"><span class="dot" id="ready-dot"></span><strong id="engine-state">Connecting…</strong><p>Online translation.<br>Your dictionary is private.</p><small>Online translation sends your message and context to Google. Your saved dictionary is private.</small></div>
+  </aside>
+  <main>
+    <header class="topbar"><span>WORKSPACE / <strong id="breadcrumb">TRANSLATE</strong></span><span class="pill" id="runtime-badge">Starting up</span></header>
+    <div id="notice" role="status" hidden></div>
+    <section id="translate-view" class="view">
+      <div class="intro"><div class="eyebrow">KANNADA, IN YOUR OWN WORDS</div><h1>A little easier to understand.</h1><p>Write Kannada in English letters. Get the meaning in English.</p></div>
+      <div class="translation-grid">
+        <div class="card input-card"><div class="card-heading"><span>Kanglish</span><span class="subtle">Kannada · English letters</span></div>
+          <label class="sr-only" for="message">Kanglish message</label><textarea id="message" maxlength="1000" placeholder="Try: naale beligge sigona" spellcheck="false"></textarea>
+          <details><summary>Add previous-message context</summary><label class="sr-only" for="context">Previous message</label><textarea id="context" maxlength="500" placeholder="Optional: the previous message, to explain the conversation"></textarea></details>
+          <div class="input-footer"><label class="check"><input type="checkbox" id="use-memory" checked> Use saved meanings</label><span id="char-count">0 / 1,000</span></div>
+          <button class="primary" id="translate-button" disabled>Translate <span>↗</span></button>
+        </div>
+        <div class="card output-card"><div class="card-heading"><span>English</span><span class="pill muted" id="result-engine">Online model</span></div>
+          <p class="result placeholder" id="translation">Your translation will appear here.</p><p id="timing" class="subtle"></p><p id="result-warning" class="warning" hidden></p>
+          <div class="result-actions"><button id="copy-button" disabled>Copy</button><button id="save-local-button" disabled>Save this meaning</button><button id="verify-button" disabled>Verify translation</button></div>
+        </div>
+      </div>
+      <div class="card verification-card" id="verification-card" hidden><div class="card-heading"><span>Translation check</span><span class="pill" id="verdict"></span></div><p class="result" id="verified-translation"></p><p id="verification-explanation" class="subtle"></p><p id="verification-timing" class="subtle"></p><button class="primary compact" id="save-verified-button" hidden>Use this correction</button><p class="subtle">A second opinion. Check the meaning before saving.</p></div>
+      <details class="card correction-card" id="correction-details"><summary>Use your own correction</summary><label for="own-correction">The correct English meaning</label><textarea id="own-correction" maxlength="4000" placeholder="Enter the translation you want Kanglish to remember"></textarea><button id="save-own-button" class="primary compact" disabled>Save correction</button><span id="saved-status" role="status"></span></details>
+      <div class="card glossary-card" id="glossary-card" hidden>
+        <div class="card-heading"><span>Teach the words in this sentence</span><span class="pill muted">Optional</span></div>
+        <p class="subtle" id="glossary-parent"></p>
+        <p class="subtle">Add the meaning of each word, or combine words into a phrase. Leave uncertain meanings blank. Names can keep their original spelling.</p>
+        <button id="split-words-button">Split sentence into words</button>
+        <div class="bulk-word-input" id="bulk-word-input" hidden>
+          <label for="bulk-word-meanings">Paste word meanings from Argon or another reference</label>
+          <textarea id="bulk-word-meanings" maxlength="32000" spellcheck="false" placeholder="maadu->do, hotel-alli->in the restaurant&#10;neeru -> water"></textarea>
+          <button id="extract-word-meanings">Extract into rows</button>
+          <p class="subtle">Use commas or new lines between mappings. Review the extracted meanings before saving. This does not call another AI.</p>
+        </div>
+        <div id="glossary-editor"></div>
+        <div class="glossary-controls"><button id="add-glossary-row">Add a word or phrase</button><button class="primary compact" id="save-glossary-button">Save word meanings</button><span id="glossary-status" role="status"></span></div>
+        <p class="subtle">These meanings join your dictionary export alongside the full sentence. Saving updates matching words; your full sentence correction stays separate.</p>
+      </div>
+      <div class="footnote"><span>✦</span><p>Saved meanings are reused in your account and offered as relevant examples for other messages. They update your dictionary; they do not change the model’s weights.</p></div>
+    </section>
+    <section id="batch-view" class="view" hidden>
+      <div class="intro"><div class="eyebrow">SMALL BATCHES, CLEAR EVIDENCE</div><h1>Put the words to the test.</h1><p>Compare words, names, slang, and sentences. Review each result before saving.</p></div>
+      <div class="card"><div class="card-heading"><label for="batch-input">Test messages</label><button id="load-examples">Load 10 example cases</button></div>
+        <p class="subtle">One message per line. Optionally add a tab followed by the expected English meaning. Maximum 500 cases per session, within 60 minutes.</p>
+        <textarea id="batch-input" class="batch-input" spellcheck="false" placeholder="neeru&#10;oota aayta&#10;ninna hesaru Rachit"></textarea>
+        <div class="batch-settings"><label class="check"><input type="checkbox" id="batch-verify"> Verify each result using cloud</label><label class="check"><input type="checkbox" id="batch-memory"> Use saved meanings</label><label>Interval (seconds)<input id="interval" type="number" value="1" min="0" max="60"></label><label>Duration (minutes)<input id="duration" type="number" value="15" min="1" max="60"></label></div>
+        <div class="batch-controls"><button class="primary compact" id="run-batch" disabled>Run batch</button><button id="stop-batch" hidden>Stop after current case</button><a class="button" href="/api/log.csv" download>Download session CSV</a><span id="batch-progress" role="status">Ready when you are.</span></div>
+      </div>
+      <div class="card batch-results"><div class="card-heading"><span>Results</span><span class="subtle">Review to choose a correction</span></div><div class="table-scroll"><table><thead><tr><th>Message / expected</th><th>Local translation</th><th>Verification</th><th>Time</th><th></th></tr></thead><tbody id="batch-rows"></tbody></table></div><p class="subtle" id="batch-empty">Your completed cases will appear here. Results are also recorded on disk.</p></div>
+      <p class="footnote">Expected meanings are references for your review. Matching words or a cloud verdict alone do not establish translation accuracy. Training coverage for this imported model is unverified.</p>
+    </section>
+    <section id="dictionary-view" class="view" hidden>
+      <div class="intro"><div class="eyebrow">MEANINGS WORTH KEEPING</div><h1>Your words, remembered.</h1><p>Corrections saved in your private account. Export them to share or import elsewhere.</p></div>
+      <details class="card dictionary-import-card" id="dictionary-bulk-panel"><summary>Bulk Import / Paste Batch</summary>
+        <p class="subtle">Paste sentence translations and their word mappings together. Word Mapping is optional. Import batch saves all valid items in one click. Conflicting duplicates keep the first occurrence; later conflicts, existing conflicts and unmatched word mappings are skipped and reported while the rest is saved. Different meanings of a word are kept as alternatives, linked to their sentences.</p>
+        <label for="dictionary-bulk-text">Sentences and word meanings</label>
+        <textarea id="dictionary-bulk-text" maxlength="64000" spellcheck="false" placeholder="1.&#10;Kanglish: Neevu hegiddeera?&#10;English: How are you?&#10;Word Mapping: Neevu -> You, hegiddeera -> how are you&#10;&#10;2.&#10;Kanglish: Nanna hesaru Rahul.&#10;English: My name is Rahul.&#10;Word Mapping: Nanna -> My, hesaru -> name, Rahul -> Rahul"></textarea>
+        <label class="check"><input type="checkbox" id="dictionary-bulk-replace"> Replace existing sentence translations and word alternatives with this batch</label>
+        <div class="glossary-controls"><button id="dictionary-bulk-preview-button">Preview</button><button class="primary compact" id="dictionary-bulk-import-button">Import batch</button></div>
+        <p id="dictionary-bulk-status" role="status" class="subtle"></p>
+        <div id="dictionary-bulk-preview" hidden></div>
+        <p class="subtle">Up to 20 sentences and 400 word mappings per import. Review meanings before importing; this saves your supplied translations without calling an AI. Export dictionary includes both sentences and linked words.</p>
+      </details>
+      <div class="card"><div class="card-heading"><label for="dictionary-search">Saved translations <span id="dictionary-count"></span></label><a class="button" id="export-dict-link" href="/api/corrections.json" download>Export dictionary</a></div><input id="dictionary-search" type="search" placeholder="Search a word, name, or meaning"><div id="dictionary-rows"></div></div>
+      <details class="card"><summary>Add a word or phrase</summary><div class="dictionary-form"><label>Kanglish<input id="dictionary-original" maxlength="4000" placeholder="Word or phrase"></label><label>English<input id="dictionary-english" maxlength="4000" placeholder="Correct meaning"></label><button class="primary compact" id="dictionary-save">Save meaning</button></div></details>
+      <p class="footnote">Your online dictionary is separate from the desktop and phone dictionaries. Export it to transfer approved meanings.</p>
+    </section>
+    <footer><span>Kanglish Online · 10 translations/minute, 100/day</span><span id="log-location"></span><button id="logout-button">Sign out</button></footer>
+  </main>
+</div>
+<script src="/auth.js"></script>
+</body></html>
