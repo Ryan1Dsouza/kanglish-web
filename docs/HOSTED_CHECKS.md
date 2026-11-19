@@ -13,6 +13,21 @@
   payload limits, uncertain speech and private history without automatic saving.
 - Automated checks make no paid provider calls. No original protected datasets,
   historical weights or recorded accuracy scores are changed.
+- All 85 Python tests and three JavaScript state suites passed, as did syntax,
+  repository security and staged/full-history Gitleaks checks. Implementation
+  commit: `9e45e35`. Production deployment `dpl_2R9WDykPRB9zJnpiUiHD6tBgDfKf`
+  was READY and aliased to https://kanglish-web.vercel.app.
+- Live HTTPS checks verified the deployed controls/JavaScript, local-blob media
+  CSP and same-origin microphone permission header. Authenticated checks verified
+  all five language codes and 20 default directions, empty named dictionaries,
+  immutable direction metadata, private reverse imports, exact saved translation
+  reuse from English to Kanglish, Tuluglish, Kannada and Tulu, export metadata and cross-owner
+  denial. Invalid audio MIME, CSRF and cross-origin requests were rejected before
+  provider calls. Both disposable synthetic accounts and their data were removed.
+- No live speech/provider quality check was performed. Automatic approval review
+  stopped browser inspection because the current browser URL could not be
+  verified. Physical microphone capture and installed voice quality remain
+  unverified; recording/upload state and provider integration are mocked above.
 
 - Provisioned a dedicated Supabase Free Plan database in Mumbai, connected to
   Vercel production/development only. Model/provider secrets are server-only.
